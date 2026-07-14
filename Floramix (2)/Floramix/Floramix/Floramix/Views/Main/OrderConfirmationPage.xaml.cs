@@ -28,8 +28,9 @@ namespace FloraMix.Views.Main
         {
             var latestOrder = OrderHistoryManager.Orders.Count > 0 ? OrderHistoryManager.Orders[0] : null;
             int orderId = latestOrder?.Id ?? 0;
+            int serverOrderId = latestOrder?.ServerOrderId ?? 0;
             string shopName = latestOrder?.Shop ?? "Wild Flowers";
-            await Navigation.PushAsync(new ChatPage(await MessageManager.GetOrCreateOrderConversationAsync(orderId, shopName)));
+            await Navigation.PushAsync(new ChatPage(await MessageManager.GetOrCreateOrderConversationAsync(orderId, shopName, serverOrderId: serverOrderId)));
         }
 
         private async void OnBackToCartTapped(object sender, EventArgs e)

@@ -292,6 +292,86 @@ app.MapPut("/api/orders/{id:int}/cancel", async (IDbContextFactory<FloraMixDbCon
     });
 });
 
+// ---- Minimal API for the MAUI customer app to read/send chat messages ----
+// Messages are tied to an order's conversation. The conversation is created
+// automatically on first access, mirroring what the shop portal already does.
+app.MapGet("/api/orders/{id:int}/messages", async (IDbContextFactory<FloraMixDbContext> dbFactory, int id) =>
+{
+    using var db = dbFactory.CreateDbContext();
+
+    var order = await db.Orders.FindAsync(id);
+    if (order == null)
+        return Results.NotFound();
+
+    var conversation = await db.Conversations
+        .Include(c => c.Messages)
+        .FirstOrDefaultAsync(c => c.OrderId == id);
+
+    if (conversation == null)
+    {
+        conversation = new FloraMix.Shared.Models.Conversation { ShopId = order.ShopId, OrderId = id };
+        db.Conversations.Add(conversation);
+        await db.SaveChangesAsync();
+    }
+
+    var messages = conversation.Messages
+        .OrderBy(m => m.SentAt)
+        .Select(m => new
+        {
+            m.Id,
+            Sender = m.Sender.ToString(),
+            m.Text,
+            m.SentAt,
+            m.IsRead
+        });
+
+    return Results.Ok(new { conversationId = conversation.Id, messages });
+});
+
+app.MapPost("/api/orders/{id:int}/messages", async (IDbContextFactory<FloraMixDbContext> dbFactory, int id, ChatMessageRequest request) =>
+{
+    using var db = dbFactory.CreateDbContext();
+
+    var order = await db.Orders.FindAsync(id);
+    if (order == null)
+        return Results.NotFound();
+
+    var sender = Enum.TryParse<FloraMix.Shared.Models.MessageSender>(request.Sender, true, out var parsedSender)
+        ? parsedSender
+        : FloraMix.Shared.Models.MessageSender.Customer;
+
+    var conversation = await db.Conversations.FirstOrDefaultAsync(c => c.OrderId == id);
+    if (conversation == null)
+    {
+        conversation = new FloraMix.Shared.Models.Conversation { ShopId = order.ShopId, OrderId = id };
+        db.Conversations.Add(conversation);
+        await db.SaveChangesAsync();
+    }
+
+    var message = new FloraMix.Shared.Models.Message
+    {
+        ConversationId = conversation.Id,
+        Sender = sender,
+        Text = request.Text,
+        SentAt = DateTime.UtcNow,
+        // A message is "read" the moment it lands on its own sender's side of the conversation
+        IsRead = sender == FloraMix.Shared.Models.MessageSender.Customer
+    };
+
+    db.Messages.Add(message);
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new
+    {
+        message.Id,
+        conversationId = conversation.Id,
+        Sender = message.Sender.ToString(),
+        message.Text,
+        message.SentAt,
+        message.IsRead
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -316,3 +396,4 @@ app.Run();
 
 record OrderRequest(string CustomerName, string CustomerEmail, string DeliveryLabel, string Occasion, List<OrderItemRequest> Items);
 record OrderItemRequest(string BouquetName, decimal Price, int Quantity);
+record ChatMessageRequest(string Sender, string Text);

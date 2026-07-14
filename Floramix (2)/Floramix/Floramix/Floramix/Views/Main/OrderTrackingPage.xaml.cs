@@ -210,7 +210,8 @@ namespace FloraMix.Views.Main
         {
             var order = _order ?? (OrderHistoryManager.Orders.Count > 0 ? OrderHistoryManager.Orders[0] : null);
             int orderId = order?.Id ?? 0;
-            await Navigation.PushAsync(new ChatPage(await MessageManager.GetOrCreateOrderConversationAsync(orderId, ShopName)));
+            int serverOrderId = order?.ServerOrderId ?? 0;
+            await Navigation.PushAsync(new ChatPage(await MessageManager.GetOrCreateOrderConversationAsync(orderId, ShopName, serverOrderId: serverOrderId)));
         }
 
         private async void OnCallShopTapped(object sender, EventArgs e)

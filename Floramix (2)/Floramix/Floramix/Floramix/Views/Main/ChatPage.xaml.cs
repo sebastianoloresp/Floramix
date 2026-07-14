@@ -11,6 +11,7 @@ namespace FloraMix.Views.Main
     public partial class ChatPage : ContentPage
     {
         private readonly Conversation _conversation;
+        private IDispatcherTimer _pollTimer;
 
         public ChatPage(Conversation conversation)
         {
@@ -21,6 +22,35 @@ namespace FloraMix.Views.Main
             OnlineStatusLabel.Text = conversation.IsOnline ? "Online now" : "Offline";
 
             BuildMessages();
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+
+            // Pull any messages sent from the web portal since we last looked.
+            await RefreshFromServerAsync();
+
+            if (_conversation.ServerOrderId != 0)
+            {
+                _pollTimer = Dispatcher.CreateTimer();
+                _pollTimer.Interval = TimeSpan.FromSeconds(5);
+                _pollTimer.Tick += async (s, e) => await RefreshFromServerAsync();
+                _pollTimer.Start();
+            }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _pollTimer?.Stop();
+        }
+
+        private async Task RefreshFromServerAsync()
+        {
+            bool changed = await MessageManager.SyncFromServerAsync(_conversation);
+            if (changed)
+                BuildMessages();
         }
 
         private void BuildMessages()
@@ -100,28 +130,12 @@ namespace FloraMix.Views.Main
 
             MessageEntry.Text = string.Empty;
 
-            await SendAutoReplyAsync();
-        }
-
-        private async Task SendAutoReplyAsync()
-        {
-            // Simulate the shop "typing" briefly before its automatic reply arrives
-            await Task.Delay(1200);
-
-            var reply = new ChatMessage
+            if (_conversation.ServerOrderId != 0)
             {
-                Text = "Thanks for your message! We've received it and one of our florists at Wild Flowers will get back to you shortly. 🌸",
-                TimeLabel = DateTime.Now.ToString("h:mm tt"),
-                IsFromUser = false
-            };
-
-            var messages = _conversation.Messages;
-            messages.Add(reply);
-            _conversation.Messages = messages;
-            _conversation.LastMessage = reply.Text;
-            _conversation.TimeLabel = reply.TimeLabel;
-            MessagesStack.Children.Add(CreateMessageBubble(reply));
-            MessageManager.SaveConversation(_conversation);
+                // Sends to the web portal so the shop owner sees it in real time.
+                // If the portal is unreachable, the message still stays saved locally above.
+                await MessageApiService.SendMessageAsync(_conversation.ServerOrderId, text);
+            }
         }
 
         private async void OnBackTapped(object sender, EventArgs e)

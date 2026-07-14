@@ -12,6 +12,10 @@ namespace FloraMix.Models
         // 0 = not tied to a specific order (e.g. general inbox chat)
         public int OrderId { get; set; } = 0;
 
+        // The order's id on the web portal's database (Order.ServerOrderId).
+        // 0 = order hasn't synced to the server yet, so chat stays local-only.
+        public int ServerOrderId { get; set; } = 0;
+
         public string ShopName { get; set; }
         public string AvatarSource { get; set; }
         public string LastMessage { get; set; }

@@ -1,5 +1,6 @@
 ﻿@page "/messages"
 @inject IShopService ShopService
+@implements IDisposable
 
 <div class="msg-page">
     <div class="msg-header">
@@ -94,21 +95,26 @@
     string searchTerm = "";
     string draftText = "";
     int shopId = 1; // TODO: replace with logged-in owner's shop
-
-    static readonly string[] AutoReplies = new[]
-    {
-        "Thanks so much for the update! 🌸",
-        "Sounds great, thank you!",
-        "Got it, appreciate the quick reply!",
-        "Perfect, thank you for letting me know!",
-        "Awesome, looking forward to it!"
-    };
+    System.Threading.Timer? pollTimer;
 
     protected override async Task OnInitializedAsync()
     {
         shop = await ShopService.GetShopAsync(shopId);
         await LoadConversations();
+
+        // Poll for new customer messages sent from the MAUI app, since this page
+        // has no push channel to the app yet.
+        pollTimer = new System.Threading.Timer(async _ =>
+        {
+            await InvokeAsync(async () =>
+            {
+                await LoadConversations();
+                StateHasChanged();
+            });
+        }, null, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5));
     }
+
+    public void Dispose() => pollTimer?.Dispose();
 
     async Task LoadConversations()
     {
@@ -152,22 +158,6 @@
 
         await ShopService.SendMessageAsync(selected.Id, MessageSender.Shop, text);
         await LoadConversations();
-
-        // Simulate the customer replying, since there's no live customer-side chat yet.
-        _ = SimulateReplyAsync(selected.Id);
-    }
-
-    async Task SimulateReplyAsync(int conversationId)
-    {
-        await Task.Delay(Random.Shared.Next(1200, 2600));
-
-        var reply = AutoReplies[Random.Shared.Next(AutoReplies.Length)];
-        await ShopService.SendMessageAsync(conversationId, MessageSender.Customer, reply);
-        await InvokeAsync(async () =>
-        {
-            await LoadConversations();
-            StateHasChanged();
-        });
     }
 
     string Initials(string name)

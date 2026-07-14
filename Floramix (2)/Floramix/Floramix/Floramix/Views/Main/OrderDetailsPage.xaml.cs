@@ -105,7 +105,7 @@ namespace FloraMix.Views.Main
         private async void OnMessageShopTapped(object sender, EventArgs e)
         {
             string shopName = string.IsNullOrEmpty(_order.Shop) ? "Wild Flowers" : _order.Shop;
-            await Navigation.PushAsync(new ChatPage(await MessageManager.GetOrCreateOrderConversationAsync(_order.Id, shopName)));
+            await Navigation.PushAsync(new ChatPage(await MessageManager.GetOrCreateOrderConversationAsync(_order.Id, shopName, serverOrderId: _order.ServerOrderId)));
         }
 
         private async void OnCallShopTapped(object sender, EventArgs e)
