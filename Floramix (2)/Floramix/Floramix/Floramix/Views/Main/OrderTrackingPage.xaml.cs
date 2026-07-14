@@ -225,10 +225,14 @@ namespace FloraMix.Views.Main
             bool confirm = await DisplayAlert("Cancel Order", "Are you sure you want to cancel this order? This cannot be undone.", "Yes, Cancel", "No");
             if (!confirm) return;
 
-            OrderHistoryManager.CancelOrder(_order);
+            bool syncedToServer = await OrderHistoryManager.CancelOrder(_order);
             UpdateStatusUI();
 
-            await DisplayAlert("Order Cancelled", "Your order has been cancelled.", "OK");
+            string message = syncedToServer
+                ? "Your order has been cancelled."
+                : "Your order has been cancelled locally, but we couldn't reach the shop right now. It will sync automatically once you're back online.";
+
+            await DisplayAlert("Order Cancelled", message, "OK");
             await Navigation.PopAsync();
         }
 

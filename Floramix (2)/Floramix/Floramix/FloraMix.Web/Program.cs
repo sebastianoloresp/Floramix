@@ -270,6 +270,28 @@ app.MapGet("/api/orders/{id:int}", async (IDbContextFactory<FloraMixDbContext> d
     });
 });
 
+app.MapPut("/api/orders/{id:int}/cancel", async (IDbContextFactory<FloraMixDbContext> dbFactory, int id) =>
+{
+    using var db = dbFactory.CreateDbContext();
+
+    var order = await db.Orders.FindAsync(id);
+    if (order == null)
+        return Results.NotFound();
+
+    if (order.Status == FloraMix.Shared.Models.OrderStatus.Delivered)
+        return Results.BadRequest(new { message = "Delivered orders cannot be cancelled." });
+
+    order.Status = FloraMix.Shared.Models.OrderStatus.Cancelled;
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new
+    {
+        order.Id,
+        order.OrderCode,
+        Status = order.Status.ToString()
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

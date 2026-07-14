@@ -108,8 +108,6 @@ namespace FloraMix.Services
                 if (Db != null)
                     await Db.SaveOrderAsync(order);
             }
-
-            await OrderApiService.SubmitOrderAsync(payload);
         }
 
         public static async void SaveRatingChange(OrderHistoryItem order)
@@ -118,11 +116,24 @@ namespace FloraMix.Services
                 await Db.SaveOrderAsync(order);
         }
 
-        public static async void CancelOrder(OrderHistoryItem order)
+        public static async Task<bool> CancelOrder(OrderHistoryItem order)
         {
+            bool syncedToServer = false;
+
+            if (order.ServerOrderId != 0)
+            {
+                var result = await OrderApiService.CancelOrderAsync(order.ServerOrderId);
+                syncedToServer = result != null;
+            }
+
+            // Update locally either way, so the customer always sees the cancellation
+            // reflected immediately. If it couldn't reach the server, the next
+            // RefreshOrderStatusFromServer call will retry the sync.
             order.Status = "Cancelled";
             if (Db != null)
                 await Db.SaveOrderAsync(order);
+
+            return syncedToServer;
         }
 
         public static async void RemoveOrder(OrderHistoryItem order)

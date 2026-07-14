@@ -70,6 +70,24 @@ namespace FloraMix.Services
             }
         }
 
+        // Lets the app cancel an order on the server (so the shop portal and DB stay in sync)
+        public static async Task<OrderStatusResponse?> CancelOrderAsync(int serverOrderId)
+        {
+            try
+            {
+                var response = await _http.PutAsync($"/api/orders/{serverOrderId}/cancel", null);
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<OrderStatusResponse>();
+            }
+            catch
+            {
+                // Web portal not reachable — caller decides how to handle offline cancellation.
+                return null;
+            }
+        }
+
         // New: lets the app check the latest status of an order
         public static async Task<OrderStatusResponse?> GetOrderStatusAsync(int serverOrderId)
         {
