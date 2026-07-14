@@ -35,6 +35,23 @@ namespace FloraMix.Views.Main
             BuildProgress();
             BuildOrderDetails();
             UpdateStatusUI();
+
+            _ = RefreshStatusFromServerAsync();
+        }
+
+        private async Task RefreshStatusFromServerAsync()
+        {
+            if (_order == null) return;
+
+            bool changed = await OrderHistoryManager.RefreshOrderStatusFromServer(_order);
+            if (changed)
+            {
+                // UI updates must happen on the main thread
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    UpdateStatusUI();
+                });
+            }
         }
 
         private void UpdateStatusUI()
@@ -43,7 +60,7 @@ namespace FloraMix.Views.Main
 
             StatusBadgeLabel.Text = _order.Status;
 
-            bool isCancellable = _order.Status == "In Transit";
+            bool isCancellable = _order.Status != "Cancelled" && _order.Status != "Delivered";
             CancelOrderButton.IsVisible = isCancellable;
 
             if (_order.Status == "Cancelled")

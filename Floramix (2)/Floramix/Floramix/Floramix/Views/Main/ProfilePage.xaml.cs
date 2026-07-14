@@ -17,17 +17,26 @@ namespace FloraMix.Views.Main
             BuildAddresses();
             RefreshQuickLinkCounts();
         }
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             ProfileNameLabel.Text = FloraMix.Services.ProfileManager.FullName;
             ProfileEmailLabel.Text = FloraMix.Services.ProfileManager.Email;
             ProfileLocationLabel.Text = FloraMix.Services.ProfileManager.Location;
+
+            foreach (var order in FloraMix.Services.OrderHistoryManager.Orders)
+            {
+                await FloraMix.Services.OrderHistoryManager.RefreshOrderStatusFromServer(order);
+            }
+
             BuildOrderHistory();
             BuildAddresses();
             RefreshQuickLinkCounts();
         }
-
+        private static bool IsActiveOrder(string status)
+        {
+            return status == "In Transit" || status == "Pending" || status == "Confirmed" || status == "Preparing" || status == "Ready";
+        }
         private void RefreshQuickLinkCounts()
         {
             OrdersCountLabel.Text = FloraMix.Services.OrderHistoryManager.Orders.Count.ToString();
@@ -66,7 +75,7 @@ namespace FloraMix.Views.Main
                 var priceLabel = new Label { Text = "\u20B1" + order.Price.ToString("N0"), FontAttributes = FontAttributes.Bold, FontSize = 16, TextColor = (Color)Application.Current.Resources["FloraCharcoal"], HorizontalOptions = LayoutOptions.End };
 
                 View bottomRightView;
-                if (order.Status == "In Transit")
+                if (IsActiveOrder(order.Status))
                 {
                     bottomRightView = new Label { Text = "Track ->", FontSize = 12, FontAttributes = FontAttributes.Bold, TextColor = (Color)Application.Current.Resources["FloraBlush"], HorizontalOptions = LayoutOptions.End };
                 }
@@ -123,7 +132,7 @@ namespace FloraMix.Views.Main
                 };
 
                 var capturedOrder = order;
-                if (order.Status == "In Transit")
+                if (IsActiveOrder(order.Status))
                 {
                     card.GestureRecognizers.Add(new TapGestureRecognizer { Command = new Command(() => OnTrackOrderTapped(capturedOrder)) });
                 }

@@ -254,6 +254,22 @@ app.MapPost("/api/orders", async (IDbContextFactory<FloraMixDbContext> dbFactory
     return Results.Ok(new { order.Id, order.OrderCode });
 });
 
+app.MapGet("/api/orders/{id:int}", async (IDbContextFactory<FloraMixDbContext> dbFactory, int id) =>
+{
+    using var db = dbFactory.CreateDbContext();
+
+    var order = await db.Orders.FindAsync(id);
+    if (order == null)
+        return Results.NotFound();
+
+    return Results.Ok(new
+    {
+        order.Id,
+        order.OrderCode,
+        Status = order.Status.ToString()
+    });
+});
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

@@ -37,17 +37,53 @@ namespace FloraMix.Services
             public List<OrderItemPayload> Items { get; set; } = new();
         }
 
-        public static async Task<bool> SubmitOrderAsync(OrderPayload payload)
+        // What the server sends back after creating an order
+        public class OrderCreatedResponse
+        {
+            public int Id { get; set; }
+            public string OrderCode { get; set; } = "";
+        }
+
+        // What the server sends back when checking status
+        public class OrderStatusResponse
+        {
+            public int Id { get; set; }
+            public string OrderCode { get; set; } = "";
+            public string Status { get; set; } = "";
+        }
+
+        // Now returns the created order info instead of just true/false
+        public static async Task<OrderCreatedResponse?> SubmitOrderAsync(OrderPayload payload)
         {
             try
             {
                 var response = await _http.PostAsJsonAsync("/api/orders", payload);
-                return response.IsSuccessStatusCode;
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<OrderCreatedResponse>();
             }
             catch
             {
                 // Web portal not reachable — order still exists locally, just not synced.
-                return false;
+                return null;
+            }
+        }
+
+        // New: lets the app check the latest status of an order
+        public static async Task<OrderStatusResponse?> GetOrderStatusAsync(int serverOrderId)
+        {
+            try
+            {
+                var response = await _http.GetAsync($"/api/orders/{serverOrderId}");
+                if (!response.IsSuccessStatusCode)
+                    return null;
+
+                return await response.Content.ReadFromJsonAsync<OrderStatusResponse>();
+            }
+            catch
+            {
+                return null;
             }
         }
     }

@@ -13,8 +13,10 @@ namespace FloraMix.Views.Main
             var shopName = FloraMix.Services.OrderHistoryManager.LastOrderShopName;
             ShopMessageLabel.Text = shopName + " has received your order and will begin preparing it shortly.";
 
-            int orderNumber = new Random().Next(2800, 2999);
-            OrderNumberLabel.Text = "Order #FM-" + orderNumber;
+            var latestOrder = OrderHistoryManager.Orders.Count > 0 ? OrderHistoryManager.Orders[0] : null;
+            OrderNumberLabel.Text = !string.IsNullOrEmpty(latestOrder?.OrderCode)
+                ? "Order #" + latestOrder.OrderCode
+                : "Order pending sync...";
         }
         private async void OnTrackOrderTapped(object sender, EventArgs e)
         {

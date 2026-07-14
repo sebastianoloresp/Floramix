@@ -99,6 +99,16 @@ namespace FloraMix.Services
             if (Db != null)
                 await Db.SaveOrderAsync(order);
 
+            var serverResult = await OrderApiService.SubmitOrderAsync(payload);
+            if (serverResult != null)
+            {
+                order.ServerOrderId = serverResult.Id;
+                order.OrderCode = serverResult.OrderCode;
+
+                if (Db != null)
+                    await Db.SaveOrderAsync(order);
+            }
+
             await OrderApiService.SubmitOrderAsync(payload);
         }
 
@@ -120,6 +130,30 @@ namespace FloraMix.Services
             Orders.Remove(order);
             if (Db != null)
                 await Db.DeleteOrderAsync(order);
+        }
+
+        public static async Task<bool> RefreshOrderStatusFromServer(OrderHistoryItem order)
+        {
+            if (order.ServerOrderId == 0) return false;
+
+            var result = await OrderApiService.GetOrderStatusAsync(order.ServerOrderId);
+            if (result == null) return false;
+
+            // Map server status to your app's local status text
+            order.Status = result.Status switch
+            {
+                "Cancelled" => "Cancelled",
+                "Delivered" => "Delivered",
+                "Ready" => "Ready",
+                "Preparing" => "Preparing",
+                "Confirmed" => "Confirmed",
+                _ => "Pending"
+            };
+
+            if (Db != null)
+                await Db.SaveOrderAsync(order);
+
+            return true;
         }
     }
 }

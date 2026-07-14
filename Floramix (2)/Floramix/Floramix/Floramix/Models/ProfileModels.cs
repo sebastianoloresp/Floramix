@@ -23,6 +23,8 @@ namespace FloraMix.Models
         public string Status { get; set; } // "In Transit" or "Delivered"
         public double Price { get; set; }
         public int Rating { get; set; } // 0 if not yet rated
+        public int ServerOrderId { get; set; } // 0 if never synced to server
+        public string OrderCode { get; set; } = ""; // e.g. "FM-2842", empty if never synced
 
         public string ItemsJson { get; set; } = "[]";
 
