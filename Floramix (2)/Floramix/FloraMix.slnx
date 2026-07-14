@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="FloraMix/FloraMix.Shared/FloraMix.Shared.csproj" />
+  <Project Path="FloraMix/FloraMix.Web/FloraMix.Web.csproj" />
+  <Project Path="FloraMix/FloraMix/FloraMix.csproj" />
+</Solution>

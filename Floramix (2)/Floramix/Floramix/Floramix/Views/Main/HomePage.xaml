@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:FloraMix.Models"
+             xmlns:converters="clr-namespace:FloraMix.Converters"
+             x:Class="FloraMix.Views.Main.HomePage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ContentPage.Resources>
+        <converters:WishlistBackgroundConverter x:Key="WishlistBgConverter" />
+        <converters:WishlistIconColorConverter x:Key="WishlistIconConverter" />
+    </ContentPage.Resources>
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24, 56, 24, 24" Spacing="24">
+
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout Grid.Column="0" Spacing="2">
+                    <HorizontalStackLayout Spacing="4">
+                        <Label Text="Good morning" FontSize="16" TextColor="{StaticResource FloraMuted}"/>
+                        <Label Text="🌸" VerticalOptions="Center"/>
+                    </HorizontalStackLayout>
+                    <Label x:Name="GreetingNameLabel" Text="Seb" FontFamily="Serif" FontSize="32" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}"/>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}" Padding="16,0" HeightRequest="52" StrokeShape="RoundRectangle 16">
+                <Grid ColumnDefinitions="Auto, *, Auto">
+                    <Label Grid.Column="0" Text="&#xE721;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraMuted}" Margin="0,0,12,0" VerticalOptions="Center"/>
+                    <Entry Grid.Column="1" x:Name="SearchEntry" Placeholder="Search arrangements, flowers..." VerticalOptions="Center" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" TextChanged="OnSearchTextChanged"/>
+                    <Label Grid.Column="2" x:Name="ClearSearchIcon" Text="&#xE711;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraMuted}" VerticalOptions="Center" IsVisible="False">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnClearSearchTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Border>
+
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout x:Name="CategoryStack" Spacing="8">
+                    <Border x:Name="PillAll" BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 18" Padding="20,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="All"/>
+                        </Border.GestureRecognizers>
+                        <Label x:Name="LabelAll" Text="All" TextColor="White" FontAttributes="Bold" FontSize="14"/>
+                    </Border>
+                    <Border x:Name="PillBirthday" BackgroundColor="White" StrokeShape="RoundRectangle 18" Padding="20,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Birthday"/>
+                        </Border.GestureRecognizers>
+                        <Label x:Name="LabelBirthday" Text="Birthday" TextColor="{StaticResource FloraCharcoal}" FontSize="14"/>
+                    </Border>
+                    <Border x:Name="PillWedding" BackgroundColor="White" StrokeShape="RoundRectangle 18" Padding="20,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Wedding"/>
+                        </Border.GestureRecognizers>
+                        <Label x:Name="LabelWedding" Text="Wedding" TextColor="{StaticResource FloraCharcoal}" FontSize="14"/>
+                    </Border>
+                    <Border x:Name="PillRomance" BackgroundColor="White" StrokeShape="RoundRectangle 18" Padding="20,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Romance"/>
+                        </Border.GestureRecognizers>
+                        <Label x:Name="LabelRomance" Text="Romance" TextColor="{StaticResource FloraCharcoal}" FontSize="14"/>
+                    </Border>
+                    <Border x:Name="PillSympathy" BackgroundColor="White" StrokeShape="RoundRectangle 18" Padding="20,8">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Sympathy"/>
+                        </Border.GestureRecognizers>
+                        <Label x:Name="LabelSympathy" Text="Sympathy" TextColor="{StaticResource FloraCharcoal}" FontSize="14"/>
+                    </Border>
+                </HorizontalStackLayout>
+            </ScrollView>
+
+            <Border StrokeShape="RoundRectangle 24" HeightRequest="200" StrokeThickness="0">
+                <Grid>
+                    <Image x:Name="BannerImage" Aspect="AspectFill"/>
+                    <BoxView Color="#25000000"/>
+                    <VerticalStackLayout VerticalOptions="Center" Padding="24" Spacing="4">
+                        <Label Text="FEATURED THIS WEEK" TextColor="White" FontSize="11" FontAttributes="Bold" CharacterSpacing="1"/>
+                        <Label x:Name="BannerTitleLabel" Text="Filipino-Grown Blooms" FontFamily="Serif" TextColor="White" FontSize="22" FontAttributes="Bold" LineHeight="1.2"/>
+                        <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" HeightRequest="34" WidthRequest="100" HorizontalOptions="Start" Margin="0,8,0,0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnShopNowTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Shop Now" TextColor="{StaticResource FloraCharcoal}" FontSize="12" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <Grid ColumnDefinitions="*, Auto">
+                <Label Grid.Column="0" Text="Popular Picks" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}"/>
+                <Label Grid.Column="1" Text="See all" TextColor="{StaticResource FloraBlush}" FontAttributes="Bold" FontSize="14" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSeeAllTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
+
+            <Label x:Name="NoResultsLabel" Text="No arrangements match your search." FontSize="14" TextColor="{StaticResource FloraMuted}" IsVisible="False" HorizontalOptions="Center" Margin="0,20,0,0"/>
+
+            <CollectionView x:Name="ProductsCollectionView">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" VerticalItemSpacing="16" HorizontalItemSpacing="16"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <VerticalStackLayout Spacing="8">
+                            <Border StrokeShape="RoundRectangle 20" HeightRequest="250" StrokeThickness="0" BackgroundColor="White">
+                                <Grid>
+                                    <Image Source="{Binding ImageSource}" Aspect="AspectFill"/>
+                                    <Border BackgroundColor="{Binding IsWishlisted, Converter={StaticResource WishlistBgConverter}}" HeightRequest="32" WidthRequest="32" StrokeShape="RoundRectangle 16" HorizontalOptions="End" VerticalOptions="Start" Margin="12" StrokeThickness="0">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnHeartTapped" CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="&#xEB52;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{Binding IsWishlisted, Converter={StaticResource WishlistIconConverter}}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border BackgroundColor="#E6FFFFFF" StrokeShape="RoundRectangle 8" HorizontalOptions="Start" VerticalOptions="End" Margin="12" Padding="8,4" StrokeThickness="0">
+                                        <Label Text="{Binding Tag}" FontSize="11" TextColor="{StaticResource FloraCharcoal}" FontAttributes="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <VerticalStackLayout Spacing="2" Padding="4,0" BackgroundColor="White">
+                                <Label Text="{Binding Shop}" FontSize="12" TextColor="{StaticResource FloraBlush}"/>
+                                <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}"/>
+                                <HorizontalStackLayout Spacing="4" Margin="0,2">
+                                    <Label Text="{Binding Rating, StringFormat='⭐ {0}'}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}"/>
+                                    <Label Text="{Binding ReviewCount, StringFormat='({0})'}" FontSize="12" TextColor="{StaticResource FloraMuted}"/>
+                                </HorizontalStackLayout>
+                                <Grid ColumnDefinitions="*, Auto" Margin="0,4,0,0">
+                                    <Label Grid.Column="0" Text="{Binding Price, StringFormat='₱{0:N0}'}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center"/>
+                                    <Border Grid.Column="1" BackgroundColor="{StaticResource FloraBlush}" HeightRequest="32" WidthRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnProductCartTapped" CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+                                        <Label Text="&#xE7BF;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.OrderDetailsPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Label Grid.Column="0" Text="&#xE72B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="1" Text="Order Details" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                <VerticalStackLayout x:Name="OrderDetailsStack" Spacing="10" />
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 24" HeightRequest="52" StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMessageShopTapped" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                        <Label Text="&#xE8BD;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                        <Label Text="Message Shop" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                    </HorizontalStackLayout>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="#A8C5A0" StrokeShape="RoundRectangle 24" HeightRequest="52" StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCallShopTapped" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                        <Label Text="&#xE717;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                        <Label Text="Call Shop" FontAttributes="Bold" FontSize="14" TextColor="White" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

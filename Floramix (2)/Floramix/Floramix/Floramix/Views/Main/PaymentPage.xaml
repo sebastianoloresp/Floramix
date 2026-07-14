@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.PaymentPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Label Grid.Column="0" Text="&#xE72B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="1" Text="Payment" FontFamily="Serif" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Grid x:Name="StepIndicatorGrid" ColumnDefinitions="*,*,*,*" />
+
+            <Border x:Name="CardPreview" HeightRequest="180" StrokeShape="RoundRectangle 20" StrokeThickness="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource FloraBlush}" Offset="0.0" />
+                        <GradientStop Color="#C08552" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid Padding="20">
+                    <Label Text="&#xE8C7;" FontFamily="Segoe Fluent Icons" FontSize="24" TextColor="#40FFFFFF" HorizontalOptions="Start" VerticalOptions="Start" />
+                    <Label x:Name="CardBrandLabel" Text="VISA" FontAttributes="Bold" FontSize="20" TextColor="White" HorizontalOptions="End" VerticalOptions="Start" />
+                    <Label x:Name="CardNumberLabel" Text="&#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  4291" FontSize="18" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center" />
+                    <VerticalStackLayout HorizontalOptions="Start" VerticalOptions="End" Spacing="2">
+                        <Label Text="CARD HOLDER" FontSize="9" TextColor="#CCFFFFFF" />
+                        <Label x:Name="CardHolderLabel" Text="Emma Rose" FontSize="13" FontAttributes="Bold" TextColor="White" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout HorizontalOptions="End" VerticalOptions="End" Spacing="2">
+                        <Label Text="EXPIRES" FontSize="9" TextColor="#CCFFFFFF" HorizontalOptions="End" />
+                        <Label x:Name="CardExpiryLabel" Text="09/28" FontSize="13" FontAttributes="Bold" TextColor="White" HorizontalOptions="End" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="&#xE8C7;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                <Label Text="Saved Cards" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout x:Name="CardsStack" Spacing="12" />
+
+            <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" HeightRequest="48" StrokeThickness="0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAddCardTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="+ Add new card" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+            <Border BackgroundColor="#EAF4EA" StrokeShape="RoundRectangle 12" Padding="14,10" StrokeThickness="0">
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="&#xE72E;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="#5B8C5A" />
+                    <Label Text="Your payment is secured with 256-bit SSL encryption. We never store your card details." FontSize="12" TextColor="#5B8C5A" LineBreakMode="WordWrap" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="54" Margin="0,8,0,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnReviewOrderTapped" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="Review Order" FontAttributes="Bold" FontSize="16" TextColor="White" />
+                    <Label Text="&#xE76C;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

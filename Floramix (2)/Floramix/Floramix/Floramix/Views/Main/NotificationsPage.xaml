@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.NotificationsPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="20" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="Notifications" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="14" HorizontalOptions="Fill">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12" HorizontalOptions="Fill">
+                    <Border Grid.Column="0" HeightRequest="40" WidthRequest="40" StrokeShape="RoundRectangle 20" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                        <Label Text="&#xEA8F;" FontFamily="Segoe Fluent Icons" FontSize="15" TextColor="{StaticResource FloraBlush}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                        <Label Text="Push Notifications" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                        <Label Text="Allow FloraMix to send alerts" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                    </VerticalStackLayout>
+                    <Switch Grid.Column="2" x:Name="PushNotificationsSwitch" IsToggled="True" OnColor="{StaticResource FloraBlush}" ThumbColor="White" HorizontalOptions="End" VerticalOptions="Center"  Margin="0,0,-110,0" />
+                </Grid>
+            </Border>
+
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                <Label Grid.Column="0" Text="Recent" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center" />
+                <Label Grid.Column="1" Text="Mark all as read" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource FloraBlush}" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMarkAllAsReadTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Border Grid.Column="2" BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 10" StrokeThickness="0" Padding="10,4">
+                    <Label x:Name="UnreadCountLabel" Text="3 unread" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource FloraBlush}" />
+                </Border>
+            </Grid>
+
+            <VerticalStackLayout x:Name="NotificationsStack" Spacing="10" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

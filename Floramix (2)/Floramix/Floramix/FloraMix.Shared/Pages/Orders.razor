@@ -1,0 +1,401 @@
+﻿@page "/orders"
+@inject IShopService ShopService
+@inject IJSRuntime JS
+@using QuestPDF.Fluent
+@using QuestPDF.Helpers
+@using QuestPDF.Infrastructure
+
+<div class="orders-page">
+
+    <div class="orders-header">
+        <div>
+            <h1>Orders</h1>
+            <div class="orders-subtitle">@(shop?.Name ?? "Shop") · Shop Portal</div>
+        </div>
+    </div>
+
+    @if (orders is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="filter-row">
+            <div class="filter-tabs">
+                <button class="filter-tab @(ActiveClass("All"))" @onclick='() => SetFilter("All")'>
+                    All Orders <span class="tab-count">@orders.Count</span>
+                </button>
+                <button class="filter-tab @(ActiveClass("Pending"))" @onclick='() => SetFilter("Pending")'>
+                    Pending <span class="tab-count">@CountFor("Pending")</span>
+                </button>
+                <button class="filter-tab @(ActiveClass("Preparing"))" @onclick='() => SetFilter("Preparing")'>
+                    Preparing <span class="tab-count">@CountFor("Preparing")</span>
+                </button>
+                <button class="filter-tab @(ActiveClass("Ready"))" @onclick='() => SetFilter("Ready")'>
+                    Ready <span class="tab-count">@CountFor("Ready")</span>
+                </button>
+                <button class="filter-tab @(ActiveClass("Delivered"))" @onclick='() => SetFilter("Delivered")'>
+                    Delivered <span class="tab-count">@CountFor("Delivered")</span>
+                </button>
+                <button class="filter-tab @(ActiveClass("Cancelled"))" @onclick='() => SetFilter("Cancelled")'>
+                    Cancelled <span class="tab-count">@CountFor("Cancelled")</span>
+                </button>
+                <button class="filter-tab @(ActiveClass("Archived"))" @onclick='() => SetFilter("Archived")'>
+                    Archived <span class="tab-count">@ArchivedCount</span>
+                </button>
+            </div>
+
+            <div class="table-tools">
+                <div class="table-search">
+                    <span class="search-icon">🔍</span>
+                    <input placeholder="Search orders..."
+                           value="@searchTerm"
+                           @oninput="OnSearchInput" />
+                </div>
+                <button class="icon-square" title="Export all orders (PDF)" @onclick="ExportOrders" disabled="@isExporting">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="orders-table-card">
+            <table class="orders-table-detailed">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Delivery</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in FilteredOrders)
+                    {
+                        <tr @key="order.Id">
+                            <td>
+                                <div class="order-id">@order.OrderCode</div>
+                                <div class="order-date">@order.CreatedAt.ToString("MMM d, yyyy · h:mm tt")</div>
+                            </td>
+                            <td>
+                                <div class="customer-cell">
+                                    <span class="cell-avatar">@Initials(order.CustomerName)</span>
+                                    <div>
+                                        <div class="customer-name">@order.CustomerName</div>
+                                        <div class="customer-email">@order.CustomerEmail</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="items-cell">
+                                    <span class="item-thumb">
+                                        @{
+                                            var firstImg = order.Items.FirstOrDefault()?.ImageUrl;
+                                        }
+                                        @if (!string.IsNullOrWhiteSpace(firstImg))
+                                        {
+                                            <img src="@firstImg" alt="" />
+                                        }
+                                        else
+                                        {
+                                            <span>💐</span>
+                                        }
+                                    </span>
+                                    <div>
+                                        <div class="item-name">@ItemSummary(order)</div>
+                                        <div class="item-qty">Qty: @order.Items.Sum(i => i.Quantity)</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="delivery-cell">
+                                    <span class="delivery-icon">🚚</span> @order.DeliveryLabel
+                                </div>
+                            </td>
+                            <td class="amount-cell">₱@order.Total.ToString("0")</td>
+                            <td>
+                                <span class="status-pill @StatusClass(order.Status)">
+                                    <span class="status-dot"></span>@order.Status
+                                </span>
+                            </td>
+                            <td>
+                                <div class="actions-cell">
+                                    @{
+                                        var nextLabel = NextStatusLabel(order.Status);
+                                    }
+                                    @if (nextLabel is not null)
+                                    {
+                                        <button class="action-link" @onclick="() => Advance(order)">→ @nextLabel</button>
+                                    }
+                                    <div class="menu-wrap">
+                                        <button class="menu-dots" @onclick="() => ToggleMenu(order.Id)">⋯</button>
+                                        @if (openMenuId == order.Id)
+                                        {
+                                            <div class="menu-dropdown">
+                                                @if (order.Status != OrderStatus.Cancelled && order.Status != OrderStatus.Delivered && !order.IsArchived)
+                                                {
+                                                    <button class="danger" @onclick="() => Cancel(order)">Cancel order</button>
+                                                }
+                                                @if (order.Status == OrderStatus.Cancelled || order.Status == OrderStatus.Delivered)
+                                                {
+                                                    @if (order.IsArchived)
+                                                    {
+                                                        <button @onclick="() => ToggleArchive(order, false)">Unarchive</button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button @onclick="() => ToggleArchive(order, true)">Archive</button>
+                                                    }
+                                                }
+                                                @if (order.Status != OrderStatus.Cancelled && order.Status != OrderStatus.Delivered && order.IsArchived)
+                                                {
+                                                    <span class="menu-empty">No actions available</span>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!FilteredOrders.Any())
+            {
+                <div class="empty-state">No orders match this filter.</div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    List<Order>? orders;
+    Shop? shop;
+    int shopId = 1; // TODO: replace with logged-in owner's shop
+
+    string activeFilter = "All";
+    string searchTerm = "";
+    int? openMenuId;
+    bool isExporting;
+    static bool questPdfLicenseSet;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (!questPdfLicenseSet)
+        {
+            QuestPDF.Settings.License = LicenseType.Community;
+            questPdfLicenseSet = true;
+        }
+
+        shop = await ShopService.GetShopAsync(shopId);
+        await LoadOrders();
+    }
+
+    async Task LoadOrders()
+    {
+        orders = await ShopService.GetOrdersAsync(shopId);
+    }
+
+    IEnumerable<Order> FilteredOrders =>
+        (orders ?? new())
+            .Where(o => activeFilter == "Archived" ? o.IsArchived : !o.IsArchived)
+            .Where(o => activeFilter == "All" || activeFilter == "Archived" || o.Status.ToString() == activeFilter)
+            .Where(o => string.IsNullOrWhiteSpace(searchTerm)
+                || o.CustomerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                || o.OrderCode.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                || o.Items.Any(i => i.BouquetName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)));
+
+    int ArchivedCount => orders?.Count(o => o.IsArchived) ?? 0;
+
+    void SetFilter(string filter)
+    {
+        activeFilter = filter;
+        openMenuId = null;
+    }
+
+    string ActiveClass(string filter) => activeFilter == filter ? "active" : "";
+
+    int CountFor(string filter) =>
+        filter == "All"
+            ? orders?.Count(o => !o.IsArchived) ?? 0
+            : orders?.Count(o => o.Status.ToString() == filter && !o.IsArchived) ?? 0;
+
+    void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+    }
+
+    void ToggleMenu(int orderId)
+    {
+        openMenuId = openMenuId == orderId ? null : orderId;
+    }
+
+    async Task Advance(Order order)
+    {
+        var next = NextStatus(order.Status);
+        if (next is null) return;
+
+        await ShopService.UpdateOrderStatusAsync(order.Id, next.Value);
+        await LoadOrders();
+    }
+
+    async Task Cancel(Order order)
+    {
+        openMenuId = null;
+        await ShopService.UpdateOrderStatusAsync(order.Id, OrderStatus.Cancelled);
+        await LoadOrders();
+    }
+
+    async Task ToggleArchive(Order order, bool archived)
+    {
+        openMenuId = null;
+        await ShopService.ArchiveOrderAsync(order.Id, archived);
+        await LoadOrders();
+    }
+
+    OrderStatus? NextStatus(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => OrderStatus.Preparing,
+        OrderStatus.Confirmed => OrderStatus.Preparing,
+        OrderStatus.Preparing => OrderStatus.Ready,
+        OrderStatus.Ready => OrderStatus.Delivered,
+        _ => null
+    };
+
+    string? NextStatusLabel(OrderStatus status) => NextStatus(status)?.ToString();
+
+    string StatusClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "pending",
+        OrderStatus.Confirmed => "pending",
+        OrderStatus.Preparing => "preparing",
+        OrderStatus.Ready => "ready",
+        OrderStatus.Delivered => "delivered",
+        OrderStatus.Cancelled => "cancelled",
+        _ => ""
+    };
+
+    string ItemSummary(Order order)
+    {
+        if (order.Items.Count == 0) return "-";
+
+        var first = order.Items[0];
+        var label = first.BouquetName;
+
+        if (order.Items.Count == 1 && first.Quantity > 1)
+        {
+            label += $" × {first.Quantity}";
+        }
+        else if (order.Items.Count > 1)
+        {
+            label += $" +{order.Items.Count - 1} more";
+        }
+
+        return label;
+    }
+
+    string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var letters = parts.Take(2).Select(p => p[0]);
+        return new string(letters.ToArray()).ToUpper();
+    }
+
+    async Task ExportOrders()
+    {
+        if (orders is null || isExporting) return;
+
+        isExporting = true;
+        try
+        {
+            var allOrders = orders
+                .OrderByDescending(o => o.CreatedAt)
+                .ToList();
+
+            var bytes = BuildOrdersPdf(allOrders);
+            var fileName = $"orders_all_{DateTime.Now:yyyyMMdd_HHmm}.pdf";
+
+            await JS.InvokeVoidAsync("downloadFileFromBytes", fileName, "application/pdf", bytes);
+        }
+        finally
+        {
+            isExporting = false;
+        }
+    }
+
+    byte[] BuildOrdersPdf(List<Order> exportOrders)
+    {
+        var shopName = shop?.Name ?? "Shop";
+        var generatedAt = DateTime.Now.ToString("MMM d, yyyy · h:mm tt");
+
+        var document = Document.Create(container =>
+        {
+            container.Page(page =>
+            {
+                page.Size(PageSizes.A4.Landscape());
+                page.Margin(30);
+                page.DefaultTextStyle(x => x.FontSize(9));
+
+                page.Header().Column(col =>
+                {
+                    col.Item().Text($"{shopName} — Orders Report").FontSize(18).Bold();
+                    col.Item().Text($"All orders ({exportOrders.Count}) · Generated {generatedAt}").FontSize(10).FontColor(Colors.Grey.Darken1);
+                });
+
+                page.Content().PaddingTop(15).Table(table =>
+                {
+                    table.ColumnsDefinition(columns =>
+                    {
+                        columns.RelativeColumn(1.4f); // Order
+                        columns.RelativeColumn(2f);   // Customer
+                        columns.RelativeColumn(2.5f); // Items
+                        columns.RelativeColumn(1.5f); // Delivery
+                        columns.RelativeColumn(1f);   // Amount
+                        columns.RelativeColumn(1.2f); // Status
+                    });
+
+                    table.Header(header =>
+                    {
+                        foreach (var title in new[] { "Order", "Customer", "Items", "Delivery", "Amount", "Status" })
+                        {
+                            header.Cell().Element(HeaderCellStyle).Text(title).Bold();
+                        }
+
+                        static IContainer HeaderCellStyle(IContainer c) =>
+                            c.Background(Colors.Grey.Lighten3).Padding(5);
+                    });
+
+                    foreach (var o in exportOrders)
+                    {
+                        table.Cell().Element(BodyCellStyle).Text($"{o.OrderCode}\n{o.CreatedAt:MMM d, h:mm tt}");
+                        table.Cell().Element(BodyCellStyle).Text($"{o.CustomerName}\n{o.CustomerEmail}");
+                        table.Cell().Element(BodyCellStyle).Text($"{ItemSummary(o)} (Qty: {o.Items.Sum(i => i.Quantity)})");
+                        table.Cell().Element(BodyCellStyle).Text(o.DeliveryLabel);
+                        table.Cell().Element(BodyCellStyle).Text($"₱{o.Total:0.00}");
+                        table.Cell().Element(BodyCellStyle).Text(o.Status.ToString());
+                    }
+
+                    static IContainer BodyCellStyle(IContainer c) =>
+                        c.BorderBottom(0.5f).BorderColor(Colors.Grey.Lighten2).Padding(5);
+                });
+
+                page.Footer().AlignCenter().Text(x =>
+                {
+                    x.Span("Page ");
+                    x.CurrentPageNumber();
+                    x.Span(" of ");
+                    x.TotalPages();
+                });
+            });
+        });
+
+        return document.GeneratePdf();
+    }
+}

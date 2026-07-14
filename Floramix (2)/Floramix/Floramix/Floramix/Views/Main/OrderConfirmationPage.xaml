@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.OrderConfirmationPage"
+             BackgroundColor="{StaticResource FloraCream}"
+             Shell.NavBarIsVisible="False">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="0">
+
+            <Grid HeightRequest="120" BackgroundColor="{StaticResource FloraFieldBg}">
+                <BoxView HorizontalOptions="Fill" VerticalOptions="Fill">
+                    <BoxView.Background>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="Transparent" Offset="0.0" />
+                            <GradientStop Color="#FBF6F1" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </BoxView.Background>
+                </BoxView>
+            </Grid>
+
+            <VerticalStackLayout Padding="24,0,24,24" Spacing="16" HorizontalOptions="Center">
+
+                <Border HeightRequest="64" WidthRequest="64" StrokeShape="RoundRectangle 32" StrokeThickness="0" BackgroundColor="White" Margin="0,-40,0,0">
+                    <Border Margin="6" StrokeShape="RoundRectangle 26" StrokeThickness="0" BackgroundColor="{StaticResource FloraBlush}">
+                        <Label Text="&#xE73E;" FontFamily="Segoe Fluent Icons" FontSize="22" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                </Border>
+
+                <Label Text="ORDER CONFIRMED" FontAttributes="Bold" FontSize="13" TextColor="{StaticResource FloraBlush}" CharacterSpacing="1" HorizontalOptions="Center" />
+                <Label Text="Your bouquet is&#10;on its way!" FontFamily="Serif" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" HorizontalTextAlignment="Center" HorizontalOptions="Center" />
+                <Label x:Name="OrderNumberLabel" Text="Order #FM-2848" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                <Label x:Name="ShopMessageLabel" Text="Wild Flowers has received your order and will begin preparing it shortly." FontSize="13" TextColor="{StaticResource FloraMuted}" HorizontalTextAlignment="Center" />
+
+                <BoxView HeightRequest="1" BackgroundColor="{StaticResource FloraFieldBg}" Margin="0,8" WidthRequest="300" />
+
+                <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*,Auto" WidthRequest="320">
+                    <Border Grid.Column="0" HeightRequest="16" WidthRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="0" BackgroundColor="{StaticResource FloraBlush}" />
+                    <BoxView Grid.Column="1" HeightRequest="2" BackgroundColor="{StaticResource FloraFieldBg}" VerticalOptions="Center" />
+                    <Border Grid.Column="2" HeightRequest="16" WidthRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="{StaticResource FloraFieldBg}" BackgroundColor="White" />
+                    <BoxView Grid.Column="3" HeightRequest="2" BackgroundColor="{StaticResource FloraFieldBg}" VerticalOptions="Center" />
+                    <Border Grid.Column="4" HeightRequest="16" WidthRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="{StaticResource FloraFieldBg}" BackgroundColor="White" />
+                    <BoxView Grid.Column="5" HeightRequest="2" BackgroundColor="{StaticResource FloraFieldBg}" VerticalOptions="Center" />
+                    <Border Grid.Column="6" HeightRequest="16" WidthRequest="16" StrokeShape="RoundRectangle 8" StrokeThickness="1" Stroke="{StaticResource FloraFieldBg}" BackgroundColor="White" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*,*,*" WidthRequest="320">
+                    <Label Grid.Column="0" Text="Placed" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource FloraBlush}" HorizontalOptions="Center" />
+                    <Label Grid.Column="1" Text="Preparing" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                    <Label Grid.Column="2" Text="On the way" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                    <Label Grid.Column="3" Text="Delivered" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                </Grid>
+
+                <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="54" WidthRequest="320" Margin="0,12,0,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnTrackOrderTapped" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                        <Label Text="Track My Order" FontAttributes="Bold" FontSize="16" TextColor="White" />
+                        <Label Text="&#xE76C;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 24" HeightRequest="54" WidthRequest="320">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMessageShopTapped" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                        <Label Text="&#xE8BD;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                        <Label Text="Message the Shop" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource FloraBlush}" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="6" Margin="0,4,0,0">
+                    <HorizontalStackLayout.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackToCartTapped" />
+                    </HorizontalStackLayout.GestureRecognizers>
+                    <Label Text="&#xE7BF;" FontFamily="Segoe Fluent Icons" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                    <Label Text="Back to Cart" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraMuted}" TextDecorations="Underline" />
+                </HorizontalStackLayout>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

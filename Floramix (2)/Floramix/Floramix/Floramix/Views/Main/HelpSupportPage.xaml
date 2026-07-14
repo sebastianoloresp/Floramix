@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.HelpSupportPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="18" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="Help &amp; Support" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 20" StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto,*,Auto" Padding="14,0">
+                    <Label Grid.Column="0" Text="&#xE721;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraMuted}" VerticalOptions="Center" />
+                    <Entry Grid.Column="1" x:Name="SearchEntry" Placeholder="Search FAQs..." BackgroundColor="Transparent" TextColor="{StaticResource FloraCharcoal}" PlaceholderColor="{StaticResource FloraMuted}" Margin="8,0" TextChanged="OnSearchTextChanged" />
+                    <Label Grid.Column="2" x:Name="ClearSearchIcon" Text="&#xE711;" FontFamily="Segoe Fluent Icons" FontSize="13" TextColor="{StaticResource FloraMuted}" VerticalOptions="Center" IsVisible="False">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnClearSearchTapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </Grid>
+            </Border>
+
+            <Grid x:Name="QuickActionsGrid" ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Border Grid.Column="0" BackgroundColor="#FDEEF1" StrokeShape="RoundRectangle 14" StrokeThickness="0" Padding="10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnLiveChatTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="&#xE8BD;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraBlush}" HorizontalOptions="Center" />
+                        <Label Text="Live Chat" FontAttributes="Bold" FontSize="12" TextColor="{StaticResource FloraBlush}" HorizontalOptions="Center" />
+                        <Label x:Name="LiveChatEtaLabel" Text="Avg 10 min" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="#EAF4EA" StrokeShape="RoundRectangle 14" StrokeThickness="0" Padding="10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnEmailUsTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="&#xE715;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="#5B8C5A" HorizontalOptions="Center" />
+                        <Label Text="Email Us" FontAttributes="Bold" FontSize="12" TextColor="#5B8C5A" HorizontalOptions="Center" />
+                        <Label Text="Within 24h" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="2" BackgroundColor="#E6EEF7" StrokeShape="RoundRectangle 14" StrokeThickness="0" Padding="10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCallUsTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label Text="&#xE717;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="#5B8DBE" HorizontalOptions="Center" />
+                        <Label Text="Call Us" FontAttributes="Bold" FontSize="12" TextColor="#5B8DBE" HorizontalOptions="Center" />
+                        <Label Text="Mon\u2013Fri 9\u20136" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <VerticalStackLayout x:Name="FaqSectionsStack" Spacing="18" />
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" StrokeThickness="0" Padding="18">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Still need help?" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+                    <Label Text="Describe your issue and we'll get back to you within 24 hours." FontSize="12" TextColor="{StaticResource FloraMuted}" LineBreakMode="WordWrap" />
+
+                    <VerticalStackLayout x:Name="TicketFormStack" Spacing="12">
+                        <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                            <Editor x:Name="TicketEditor" Placeholder="e.g. My order arrived with damaged flowers..." AutoSize="TextChanges" HeightRequest="70" BackgroundColor="Transparent" TextColor="{StaticResource FloraCharcoal}" PlaceholderColor="{StaticResource FloraMuted}" Margin="8,6" />
+                        </Border>
+                        <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="50" StrokeThickness="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnSubmitTicketTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Submit Ticket" FontAttributes="Bold" FontSize="15" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Border x:Name="TicketConfirmationBorder" BackgroundColor="#EAF4EA" StrokeShape="RoundRectangle 14" StrokeThickness="0" Padding="14" IsVisible="False">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+                            <Border Grid.Column="0" HeightRequest="34" WidthRequest="34" StrokeShape="RoundRectangle 17" StrokeThickness="0" BackgroundColor="#7A9A72">
+                                <Label Text="&#xE73E;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2">
+                                <Label Text="Ticket Submitted!" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                                <Label x:Name="TicketReferenceLabel" Text="Reference #SUP-00847. We'll email you shortly." FontSize="12" TextColor="{StaticResource FloraMuted}" LineBreakMode="WordWrap" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

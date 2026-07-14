@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.WishlistPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="18" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="Wishlist" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+                <Border Grid.Column="2" BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 10" StrokeThickness="0" Padding="10,4">
+                    <Label x:Name="ItemCountLabel" Text="6 items" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </Grid>
+
+            <Grid x:Name="WishlistGrid" ColumnDefinitions="*,*" ColumnSpacing="14" RowSpacing="14" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

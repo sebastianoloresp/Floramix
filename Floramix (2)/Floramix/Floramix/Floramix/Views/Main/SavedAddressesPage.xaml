@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.SavedAddressesPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="18" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="Saved Addresses" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <VerticalStackLayout x:Name="AddressesStack" Spacing="14" />
+
+            <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 20" HeightRequest="48" StrokeThickness="0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAddAddressTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="+ Add New Address" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraBlush}" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

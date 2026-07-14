@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.ProductDetailPage"
+             BackgroundColor="{StaticResource FloraCream}"
+             Shell.NavBarIsVisible="False">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="0">
+
+            <Grid HeightRequest="380">
+                <CarouselView x:Name="ImageCarousel"
+                      HeightRequest="380"
+                      HorizontalOptions="Fill"
+                      Loop="False"
+                      IsSwipeEnabled="True"
+                      IndicatorView="GalleryIndicator">
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding .}" Aspect="AspectFill" HeightRequest="380" HorizontalOptions="Fill" />
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+
+                <IndicatorView x:Name="GalleryIndicator"
+                               IndicatorColor="#66FFFFFF"
+                               SelectedIndicatorColor="White"
+                               IndicatorSize="7"
+                               HorizontalOptions="Center"
+                               VerticalOptions="End"
+                               Margin="0,0,0,16" />
+
+                <Border x:Name="PrevImageButton"
+                        BackgroundColor="#66000000"
+                        HeightRequest="36"
+                        WidthRequest="36"
+                        StrokeShape="RoundRectangle 18"
+                        StrokeThickness="0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center"
+                        Margin="16,0,0,0"
+                        IsVisible="False">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnPrevImageTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <Border x:Name="NextImageButton"
+                        BackgroundColor="#66000000"
+                        HeightRequest="36"
+                        WidthRequest="36"
+                        StrokeShape="RoundRectangle 18"
+                        StrokeThickness="0"
+                        HorizontalOptions="End"
+                        VerticalOptions="Center"
+                        Margin="0,0,16,0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNextImageTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76C;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <Border BackgroundColor="White"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        StrokeShape="RoundRectangle 20"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Start"
+                        Margin="20,50,0,0"
+                        StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE72B;"
+                           FontFamily="Segoe Fluent Icons"
+                           FontSize="16"
+                           TextColor="{StaticResource FloraCharcoal}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+                </Border>
+
+                <HorizontalStackLayout HorizontalOptions="End" VerticalOptions="Start" Margin="0,50,20,0" Spacing="10">
+                    <Border x:Name="HeartBorder"
+                            BackgroundColor="{StaticResource FloraBlush}"
+                            HeightRequest="40"
+                            WidthRequest="40"
+                            StrokeShape="RoundRectangle 20"
+                            StrokeThickness="0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnHeartTapped" />
+                        </Border.GestureRecognizers>
+                        <Label x:Name="HeartIconLabel"
+                               Text="&#xEB51;"
+                               FontFamily="Segoe Fluent Icons"
+                               FontSize="16"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+
+                <Border BackgroundColor="White"
+                        StrokeShape="RoundRectangle 14"
+                        Padding="12,6"
+                        HorizontalOptions="End"
+                        VerticalOptions="End"
+                        Margin="0,0,20,20"
+                        StrokeThickness="0">
+                    <Label x:Name="StockLabel"
+                           Text="8 left in stock"
+                           FontSize="12"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </Grid>
+
+            <VerticalStackLayout Padding="24" Spacing="16">
+
+                <Grid ColumnDefinitions="*, Auto">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <HorizontalStackLayout Spacing="4">
+                            <Label Text="&#xE81D;"
+                                   FontFamily="Segoe Fluent Icons"
+                                   FontSize="12"
+                                   TextColor="{StaticResource FloraBlush}"
+                                   VerticalOptions="Center" />
+                            <Label x:Name="ShopLocationLabel"
+                                   Text="Sta Rosa, Laguna"
+                                   FontSize="13"
+                                   TextColor="{StaticResource FloraBlush}" />
+                        </HorizontalStackLayout>
+                        <Label x:Name="ProductNameLabel"
+                               Text="Product Name"
+                               FontFamily="Serif"
+                               FontSize="26"
+                               FontAttributes="Bold"
+                               TextColor="{StaticResource FloraCharcoal}" />
+                        <HorizontalStackLayout Spacing="4">
+                            <Label x:Name="RatingLabel"
+                                   Text="Rating 4.9"
+                                   FontSize="14"
+                                   TextColor="{StaticResource FloraCharcoal}" />
+                            <Label x:Name="ReviewCountLabel"
+                                   Text="127 reviews"
+                                   FontSize="14"
+                                   TextColor="{StaticResource FloraMuted}" />
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                    <Label Grid.Column="1"
+                           x:Name="PriceLabel"
+                           Text="₱68"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="{StaticResource FloraCharcoal}"
+                           VerticalOptions="Start" />
+                </Grid>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Color Palette" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+                    <HorizontalStackLayout x:Name="ColorPaletteStack" Spacing="10" />
+                </VerticalStackLayout>
+
+                <Border BackgroundColor="#EAF4EA" StrokeShape="RoundRectangle 12" Padding="14,10" StrokeThickness="0">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="&#xE823;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="#5B8C5A" />
+                        <Label Text="Same-day if ordered before 2 PM" FontSize="13" TextColor="#5B8C5A" />
+                    </HorizontalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="About this arrangement" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource FloraCharcoal}" />
+                    <Label x:Name="DescriptionLabel" FontSize="14" LineHeight="1.4" TextColor="{StaticResource FloraMuted}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="What's included" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource FloraCharcoal}" />
+                    <VerticalStackLayout x:Name="IncludedStack" Spacing="6" />
+                </VerticalStackLayout>
+
+                <Grid ColumnDefinitions="*, Auto">
+                    <Label Grid.Column="0" Text="Reviews" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource FloraCharcoal}" />
+                    <Label Grid.Column="1"
+                           x:Name="SeeAllReviewsLabel"
+                           Text="See all 127"
+                           TextColor="{StaticResource FloraBlush}"
+                           FontAttributes="Bold"
+                           FontSize="13"
+                           VerticalOptions="Center" />
+                </Grid>
+
+                <VerticalStackLayout x:Name="ReviewsStack" Spacing="12" />
+
+                <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12" Margin="0,8,0,24">
+                    <Border Grid.Column="0"
+                            BackgroundColor="{StaticResource FloraFieldBg}"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="12,8"
+                            StrokeThickness="0">
+                        <HorizontalStackLayout Spacing="14">
+                            <Label Text="-" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnDecreaseQuantity" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label x:Name="QuantityLabel" Text="1" FontAttributes="Bold" FontSize="16" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center" />
+                            <Label Text="+" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnIncreaseQuantity" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1"
+                            BackgroundColor="Transparent"
+                            Stroke="{StaticResource FloraBlush}"
+                            StrokeThickness="1.5"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="0"
+                            HeightRequest="48">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCustomizeTapped" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                            <Label Text="&#xE70F;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                            <Label Text="Customize" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="2"
+                            BackgroundColor="{StaticResource FloraBlush}"
+                            StrokeShape="RoundRectangle 20"
+                            Padding="0"
+                            HeightRequest="48">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnAddToCartTapped" />
+                        </Border.GestureRecognizers>
+                        <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8" Padding="16,0">
+                            <Label Text="&#xE7BF;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                            <Label Text="Add to Cart" FontAttributes="Bold" FontSize="14" TextColor="White" />
+                        </HorizontalStackLayout>
+                    </Border>
+                </Grid>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

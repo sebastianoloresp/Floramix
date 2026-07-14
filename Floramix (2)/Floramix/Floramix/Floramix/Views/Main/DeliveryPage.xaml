@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.DeliveryPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Label Grid.Column="0" Text="&#xE72B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="1" Text="Delivery" FontFamily="Serif" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Grid x:Name="StepIndicatorGrid" ColumnDefinitions="*,*,*,*" />
+
+            <HorizontalStackLayout Spacing="8">
+                <Label Text="&#xE81D;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                <Label Text="Deliver to" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+            </HorizontalStackLayout>
+
+            <VerticalStackLayout x:Name="AddressStack" Spacing="12" />
+
+            <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 20" HeightRequest="48" StrokeThickness="0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnAddAddressTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="+ Add new address" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+            <HorizontalStackLayout Spacing="8" Margin="0,8,0,0">
+                <Label Text="&#xE823;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                <Label Text="Choose Date" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+            </HorizontalStackLayout>
+
+            <FlexLayout x:Name="DateStack" Wrap="Wrap" Direction="Row" JustifyContent="Start" AlignItems="Start" AlignContent="Start" />
+
+            <Label Text="Choose Time Slot" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" Margin="0,8,0,0" />
+
+            <Grid x:Name="TimeSlotGrid" ColumnDefinitions="*,*" RowSpacing="10" ColumnSpacing="10" />
+
+            <Label Text="Delivery Note (optional)" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" Margin="0,8,0,0" />
+            <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 12" Padding="14" HeightRequest="90" StrokeThickness="0">
+                <Editor x:Name="DeliveryNoteEditor" Placeholder="e.g. Please leave with the doorman if no answer" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" />
+            </Border>
+
+            <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="54" Margin="0,8,0,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnContinueTapped" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="Continue to Payment" FontAttributes="Bold" FontSize="16" TextColor="White" />
+                    <Label Text="&#xE76C;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

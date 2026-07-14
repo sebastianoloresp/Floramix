@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:FloraMix.Models"
+             xmlns:converters="clr-namespace:FloraMix.Converters"
+             x:Class="FloraMix.Views.Main.AllProductsPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ContentPage.Resources>
+        <converters:WishlistBackgroundConverter x:Key="WishlistBgConverter" />
+        <converters:WishlistIconColorConverter x:Key="WishlistIconConverter" />
+    </ContentPage.Resources>
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="18">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="All Arrangements" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <CollectionView x:Name="AllProductsCollectionView">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" VerticalItemSpacing="16" HorizontalItemSpacing="16"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <VerticalStackLayout Spacing="8">
+                            <Border StrokeShape="RoundRectangle 20" HeightRequest="250" StrokeThickness="0" BackgroundColor="White">
+                                <Grid>
+                                    <Image Source="{Binding ImageSource}" Aspect="AspectFill"/>
+                                    <Border BackgroundColor="{Binding IsWishlisted, Converter={StaticResource WishlistBgConverter}}" HeightRequest="32" WidthRequest="32" StrokeShape="RoundRectangle 16" HorizontalOptions="End" VerticalOptions="Start" Margin="12" StrokeThickness="0">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnHeartTapped" CommandParameter="{Binding .}" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="&#xEB52;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{Binding IsWishlisted, Converter={StaticResource WishlistIconConverter}}" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                    <Border BackgroundColor="#E6FFFFFF" StrokeShape="RoundRectangle 8" HorizontalOptions="Start" VerticalOptions="End" Margin="12" Padding="8,4" StrokeThickness="0">
+                                        <Label Text="{Binding Tag}" FontSize="11" TextColor="{StaticResource FloraCharcoal}" FontAttributes="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <VerticalStackLayout Spacing="2" Padding="4,0" BackgroundColor="White">
+                                <Label Text="{Binding Shop}" FontSize="12" TextColor="{StaticResource FloraBlush}"/>
+                                <Label Text="{Binding Name}" FontSize="16" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}"/>
+                                <HorizontalStackLayout Spacing="4" Margin="0,2">
+                                    <Label Text="{Binding Rating, StringFormat='⭐ {0}'}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}"/>
+                                    <Label Text="{Binding ReviewCount, StringFormat='({0})'}" FontSize="12" TextColor="{StaticResource FloraMuted}"/>
+                                </HorizontalStackLayout>
+                                <Grid ColumnDefinitions="*, Auto" Margin="0,4,0,0">
+                                    <Label Grid.Column="0" Text="{Binding Price, StringFormat='₱{0:N0}'}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center"/>
+                                    <Border Grid.Column="1" BackgroundColor="{StaticResource FloraBlush}" HeightRequest="32" WidthRequest="32" StrokeShape="RoundRectangle 16" StrokeThickness="0">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnProductCartTapped" CommandParameter="{Binding .}"/>
+                                        </Border.GestureRecognizers>
+                                        <Label Text="&#xE7BF;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center"/>
+                                    </Border>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

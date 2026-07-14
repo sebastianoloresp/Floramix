@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.AddCardPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="18" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="Add New Card" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Border HeightRequest="180" StrokeShape="RoundRectangle 20" StrokeThickness="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource FloraBlush}" Offset="0.0" />
+                        <GradientStop Color="#C08552" Offset="1.0" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid Padding="20">
+                    <Label Text="&#xE8C7;" FontFamily="Segoe Fluent Icons" FontSize="24" TextColor="#40FFFFFF" HorizontalOptions="Start" VerticalOptions="Start" />
+                    <Label x:Name="PreviewNumberLabel" Text="&#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;" FontSize="18" TextColor="White" HorizontalOptions="Start" VerticalOptions="Center" CharacterSpacing="1" />
+                    <VerticalStackLayout HorizontalOptions="Start" VerticalOptions="End" Spacing="2">
+                        <Label Text="CARD HOLDER" FontSize="9" TextColor="#CCFFFFFF" />
+                        <Label x:Name="PreviewHolderLabel" Text="YOUR NAME" FontSize="13" FontAttributes="Bold" TextColor="White" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout HorizontalOptions="End" VerticalOptions="End" Spacing="2">
+                        <Label Text="EXPIRES" FontSize="9" TextColor="#CCFFFFFF" HorizontalOptions="End" />
+                        <Label x:Name="PreviewExpiryLabel" Text="MM/YY" FontSize="13" FontAttributes="Bold" TextColor="White" HorizontalOptions="End" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Card Number" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="CardNumberEntry" Placeholder="0000 0000 0000 0000" Keyboard="Numeric" MaxLength="19" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" TextChanged="OnCardNumberChanged" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Cardholder Name" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="CardHolderEntry" Placeholder="Emma Rose" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" TextChanged="OnCardHolderChanged" />
+                </Border>
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="14">
+                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                    <Label Text="Expiry Date" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                    <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                        <Entry x:Name="ExpiryEntry" Placeholder="MM/YY" Keyboard="Numeric" MaxLength="5" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" TextChanged="OnExpiryChanged" />
+                    </Border>
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="6">
+                    <Label Text="CVV" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                    <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Entry x:Name="CvvEntry" Grid.Column="0" Placeholder="123" Keyboard="Numeric" MaxLength="4" IsPassword="True" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" />
+                            <Label x:Name="CvvEyeIcon" Grid.Column="1" Text="&#xE7B3;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraMuted}" VerticalOptions="Center" Margin="0,0,10,0">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnToggleCvvVisibility" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="52" StrokeThickness="0" Margin="0,10,0,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSaveCardTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="Save Card Securely" FontAttributes="Bold" FontSize="15" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

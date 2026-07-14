@@ -1,0 +1,397 @@
+/* --- Page header --- */
+.orders-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 1.25rem;
+}
+
+    .orders-header h1 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #2a2a2a;
+        margin: 0;
+    }
+
+.orders-subtitle {
+    font-size: 0.85rem;
+    color: #9a9a9a;
+    margin-top: 0.15rem;
+}
+
+/* --- Filter row --- */
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.filter-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.filter-tab {
+    background: #ffffff;
+    border: 1px solid #eee9e7;
+    color: #6b6b6b;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+    .filter-tab.active {
+        background: #f472a0;
+        border-color: #f472a0;
+        color: #ffffff;
+    }
+
+.tab-count {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 999px;
+    font-size: 0.72rem;
+    padding: 0.05rem 0.45rem;
+}
+
+.filter-tab.active .tab-count {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* --- Table tools (search / filter / export) --- */
+.table-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.table-search {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #ffffff;
+    border: 1px solid #e7e3e1;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    min-width: 220px;
+}
+
+    .table-search input {
+        border: none;
+        outline: none;
+        background: transparent;
+        font-size: 0.85rem;
+        width: 100%;
+        color: #4a4a4a;
+    }
+
+.icon-square {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #e7e3e1;
+    color: #6b6b6b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+    .icon-square:hover {
+        background: #f7f5f4;
+    }
+
+/* --- Table card --- */
+.orders-table-card {
+    background: #ffffff;
+    border: 1px solid #eee9e7;
+    border-radius: 16px;
+    padding: 0.5rem 1rem;
+    overflow-x: auto;
+}
+
+.orders-table-detailed {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.87rem;
+}
+
+    .orders-table-detailed thead th {
+        text-align: left;
+        color: #9a9a9a;
+        font-weight: 600;
+        font-size: 0.72rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        border-bottom: 1px solid #f0ecea;
+        padding: 0.9rem 0.6rem;
+        white-space: nowrap;
+    }
+
+    .orders-table-detailed tbody td {
+        border-bottom: 1px solid #f5f2f0;
+        padding: 0.85rem 0.6rem;
+        vertical-align: middle;
+    }
+
+    .orders-table-detailed tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+/* --- Order id cell --- */
+.order-id {
+    font-weight: 700;
+    color: #2a2a2a;
+}
+
+.order-date {
+    font-size: 0.75rem;
+    color: #9a9a9a;
+    margin-top: 0.1rem;
+}
+
+/* --- Customer cell --- */
+.customer-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.cell-avatar {
+    width: 2.1rem;
+    height: 2.1rem;
+    border-radius: 50%;
+    background: #f4dde6;
+    color: #a05070;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.customer-name {
+    font-weight: 600;
+    color: #2a2a2a;
+}
+
+.customer-email {
+    font-size: 0.75rem;
+    color: #9a9a9a;
+}
+
+/* --- Items cell --- */
+.items-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.item-thumb {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 10px;
+    background: #f7f0e9;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+    .item-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.item-name {
+    font-weight: 600;
+    color: #2a2a2a;
+}
+
+.item-qty {
+    font-size: 0.75rem;
+    color: #9a9a9a;
+}
+
+/* --- Delivery cell --- */
+.delivery-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #4a4a4a;
+    white-space: nowrap;
+}
+
+.delivery-icon {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* --- Amount cell --- */
+.amount-cell {
+    font-weight: 700;
+    color: #2a2a2a;
+    white-space: nowrap;
+}
+
+/* --- Status pill --- */
+.status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 0.82rem;
+    white-space: nowrap;
+}
+
+.status-dot {
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-pill.pending {
+    color: #b7871f;
+}
+
+    .status-pill.pending .status-dot {
+        background: #e0a83a;
+    }
+
+.status-pill.preparing {
+    color: #3d6fc9;
+}
+
+    .status-pill.preparing .status-dot {
+        background: #3d6fc9;
+    }
+
+.status-pill.ready {
+    color: #2f9e63;
+}
+
+    .status-pill.ready .status-dot {
+        background: #2f9e63;
+    }
+
+.status-pill.delivered {
+    color: #6b6b6b;
+}
+
+    .status-pill.delivered .status-dot {
+        background: #9a9a9a;
+    }
+
+.status-pill.cancelled {
+    background: #e0435c;
+    color: #ffffff;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+}
+
+    .status-pill.cancelled .status-dot {
+        display: none;
+    }
+
+/* --- Actions cell --- */
+.actions-cell {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    position: relative;
+}
+
+.action-link {
+    background: none;
+    border: none;
+    color: #d94f7c;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    white-space: nowrap;
+}
+
+    .action-link:hover {
+        text-decoration: underline;
+    }
+
+.menu-wrap {
+    position: relative;
+}
+
+.menu-dots {
+    background: none;
+    border: none;
+    color: #9a9a9a;
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.1rem 0.4rem;
+}
+
+    .menu-dots:hover {
+        color: #4a4a4a;
+    }
+
+.menu-dropdown {
+    position: absolute;
+    top: 1.9rem;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid #eee9e7;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    padding: 0.4rem;
+    z-index: 5;
+    min-width: 150px;
+}
+
+    .menu-dropdown button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        background: none;
+        border: none;
+        padding: 0.5rem 0.6rem;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        cursor: pointer;
+        color: #2a2a2a;
+    }
+
+        .menu-dropdown button:hover {
+            background: #f7f5f4;
+        }
+
+        .menu-dropdown button.danger {
+            color: #d1495b;
+        }
+
+.menu-empty {
+    display: block;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.78rem;
+    color: #9a9a9a;
+}
+
+/* --- Empty state --- */
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #9a9a9a;
+    font-size: 0.9rem;
+}

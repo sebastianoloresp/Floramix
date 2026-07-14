@@ -1,0 +1,208 @@
+﻿@inherits LayoutComponentBase
+@inject IShopService ShopService
+@inject NavigationManager Nav
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text"
+                       placeholder="Search orders, customers..."
+                       value="@searchTerm"
+                       @oninput="OnSearchInput"
+                       @onkeydown="OnSearchKeyDown" />
+            </div>
+
+            <div class="dropdown-anchor">
+                <div class="icon-btn" @onclick="ToggleNotifications" @onclick:stopPropagation="true">
+                    🔔
+                    @if (NotificationCount > 0)
+                    {
+                        <span class="ping"></span>
+                    }
+                </div>
+
+                @if (notificationsOpen)
+                {
+                    <div class="dropdown-panel notifications-panel" @onclick:stopPropagation="true">
+                        <div class="dropdown-header">
+                            <span>Notifications</span>
+                            <button class="dropdown-close" @onclick="() => notificationsOpen = false">✕</button>
+                        </div>
+
+                        @if (notifications.Count == 0)
+                        {
+                            <div class="dropdown-empty">You're all caught up.</div>
+                        }
+                        else
+                        {
+                            @foreach (var n in notifications)
+                            {
+                                <div class="notification-item" @onclick="() => GoTo(n.Link)">
+                                    <span class="notification-dot @n.DotClass"></span>
+                                    <div>
+                                        <div class="notification-text">@n.Text</div>
+                                        <div class="notification-time">@n.RelativeTime</div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+
+            <div class="avatar-circle" @onclick='() => GoTo("/shop-settings")'>
+                @AvatarInitials
+            </div>
+        </div>
+
+        @if (notificationsOpen)
+        {
+            <div class="dropdown-overlay" @onclick="CloseAllMenus"></div>
+        }
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+<div id="blazor-error-ui" data-nosnippet>
+    An unhandled error has occurred.
+    <a href="." class="reload">Reload</a>
+    <span class="dismiss">🗙</span>
+</div>
+
+@code {
+    Shop? shop;
+    List<Bouquet> bouquets = new();
+    List<Order> orders = new();
+    int shopId = 1; // TODO: replace with logged-in owner's shop
+
+    string searchTerm = "";
+    bool notificationsOpen;
+
+    List<NotificationItem> notifications = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        shop = await ShopService.GetShopAsync(shopId);
+        orders = await ShopService.GetOrdersAsync(shopId);
+        bouquets = await ShopService.GetBouquetsAsync(shopId);
+
+        BuildNotifications();
+    }
+
+    void BuildNotifications()
+    {
+        var list = new List<NotificationItem>();
+
+        var recentOrders = orders
+            .OrderByDescending(o => o.CreatedAt)
+            .Take(3);
+
+        foreach (var o in recentOrders)
+        {
+            list.Add(new NotificationItem
+            {
+                Text = $"New order {o.OrderCode} from {o.CustomerName}",
+                Timestamp = o.CreatedAt,
+                DotClass = "dot-pink",
+                Link = "/orders"
+            });
+        }
+
+        var stockAlerts = bouquets
+            .Where(b => b.Status == ProductStatus.LowStock || b.Status == ProductStatus.OutOfStock)
+            .OrderBy(b => b.StockCount);
+
+        foreach (var b in stockAlerts)
+        {
+            var text = b.Status == ProductStatus.OutOfStock
+                ? $"{b.Name} is out of stock"
+                : $"{b.Name} is running low ({b.StockCount} left)";
+
+            list.Add(new NotificationItem
+            {
+                Text = text,
+                Timestamp = DateTime.Now,
+                DotClass = "dot-amber",
+                Link = "/bouquets"
+            });
+        }
+
+        notifications = list
+            .OrderByDescending(n => n.Timestamp)
+            .Take(8)
+            .ToList();
+    }
+
+    int NotificationCount => notifications.Count;
+
+    string AvatarInitials
+    {
+        get
+        {
+            var name = shop?.Name;
+            if (string.IsNullOrWhiteSpace(name)) return "SP";
+
+            var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var letters = parts.Take(2).Select(p => p[0]);
+            return new string(letters.ToArray()).ToUpper();
+        }
+    }
+
+    void OnSearchInput(ChangeEventArgs e)
+    {
+        searchTerm = e.Value?.ToString() ?? "";
+    }
+
+    void OnSearchKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter" && !string.IsNullOrWhiteSpace(searchTerm))
+        {
+            GoTo($"/orders?search={Uri.EscapeDataString(searchTerm)}");
+        }
+    }
+
+    void ToggleNotifications()
+    {
+        notificationsOpen = !notificationsOpen;
+    }
+
+    void CloseAllMenus()
+    {
+        notificationsOpen = false;
+    }
+
+    void GoTo(string url)
+    {
+        CloseAllMenus();
+        Nav.NavigateTo(url);
+    }
+
+    class NotificationItem
+    {
+        public string Text { get; set; } = "";
+        public DateTime Timestamp { get; set; }
+        public string DotClass { get; set; } = "";
+        public string Link { get; set; } = "";
+
+        public string RelativeTime
+        {
+            get
+            {
+                var span = DateTime.Now - Timestamp;
+                if (span.TotalMinutes < 1) return "just now";
+                if (span.TotalMinutes < 60) return $"{(int)span.TotalMinutes}m ago";
+                if (span.TotalHours < 24) return $"{(int)span.TotalHours}h ago";
+                return $"{(int)span.TotalDays}d ago";
+            }
+        }
+    }
+}

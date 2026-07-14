@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Onboarding.OnboardingPage"
+             BackgroundColor="{StaticResource FloraCream}"
+             Shell.NavBarIsVisible="False">
+    <Grid RowDefinitions="*, Auto">
+
+        <Grid Grid.Row="0">
+            <Image Source="roses_closeup.png"
+                   Aspect="AspectFill"
+                   VerticalOptions="FillAndExpand"
+                   HorizontalOptions="FillAndExpand" />
+
+            <BoxView HorizontalOptions="Fill" VerticalOptions="Fill">
+                <BoxView.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop Color="Transparent" Offset="0.0" />
+                        <GradientStop Color="Transparent" Offset="0.55" />
+                        <GradientStop Color="#FBF6F1" Offset="1.0" />
+                    </LinearGradientBrush>
+                </BoxView.Background>
+            </BoxView>
+
+            <HorizontalStackLayout VerticalOptions="Start"
+                                   HorizontalOptions="Start"
+                                   Spacing="12"
+                                   Padding="24, 56, 0, 0">
+                <Border HeightRequest="40"
+                        WidthRequest="40"
+                        StrokeShape="RoundRectangle 20"
+                        BackgroundColor="{StaticResource FloraBlush}">
+                    <Image Source="build_icon.png" HeightRequest="20" WidthRequest="20"
+                           VerticalOptions="Center" HorizontalOptions="Center" />
+                </Border>
+                <Label Text="FloraMix"
+                       TextColor="White"
+                       FontAttributes="Bold"
+                       FontSize="24"
+                       VerticalOptions="Center" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="1"
+                             Spacing="24"
+                             Padding="32, 40, 32, 48"
+                             BackgroundColor="{StaticResource FloraCream}">
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Fresh flowers,"
+                       FontFamily="Serif"
+                       FontSize="32"
+                       TextColor="{StaticResource FloraCharcoal}" />
+                <Label Text="beautifully arranged."
+                       FontFamily="Serif"
+                       FontAttributes="Italic"
+                       FontSize="32"
+                       TextColor="{StaticResource FloraCharcoal}" />
+            </VerticalStackLayout>
+            <Label Text="Discover stunning bouquets crafted by local florists, and have them delivered right to your door."
+                   FontSize="16"
+                   LineHeight="1.4"
+                   TextColor="{StaticResource FloraMuted}" />
+            <Button Text="Get Started"
+                    BackgroundColor="{StaticResource FloraBlush}"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="16"
+                    HeightRequest="56"
+                    CornerRadius="28"
+                    Margin="0,16,0,0"
+                    Clicked="OnGetStartedClicked" />
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="4" Margin="0,8,0,0">
+                <Label Text="Already have an account?" TextColor="{StaticResource FloraMuted}" FontSize="14" />
+                <Label Text="Sign In" TextColor="{StaticResource FloraBlush}" FontAttributes="Bold" FontSize="14">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSignInTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.RemindersPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <Grid>
+        <ScrollView VerticalScrollBarVisibility="Never">
+            <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+                <Label Text="Never forget a special day" FontSize="13" TextColor="{StaticResource FloraMuted}" />
+                <Label Text="Occasion Reminders" FontFamily="Serif" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="16" StrokeThickness="0">
+                    <VerticalStackLayout Spacing="14">
+
+                        <Grid ColumnDefinitions="Auto,*,Auto">
+                            <Label Grid.Column="0" Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPrevMonthTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="1" x:Name="MonthYearLabel" Text="June 2026" FontAttributes="Bold" FontSize="17" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                            <Label Grid.Column="2" Text="&#xE76C;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNextMonthTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </Grid>
+
+                        <Grid ColumnDefinitions="*,*,*,*,*,*,*">
+                            <Label Grid.Column="0" Text="Su" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                            <Label Grid.Column="1" Text="Mo" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                            <Label Grid.Column="2" Text="Tu" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                            <Label Grid.Column="3" Text="We" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                            <Label Grid.Column="4" Text="Th" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                            <Label Grid.Column="5" Text="Fr" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                            <Label Grid.Column="6" Text="Sa" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                        </Grid>
+
+                        <Grid x:Name="CalendarGrid" ColumnDefinitions="*,*,*,*,*,*,*" RowSpacing="8" ColumnSpacing="4" />
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <HorizontalStackLayout Spacing="16">
+                    <HorizontalStackLayout Spacing="6">
+                        <Border BackgroundColor="{StaticResource FloraBlush}" HeightRequest="8" WidthRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" />
+                        <Label Text="Birthday" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6">
+                        <Border BackgroundColor="#A8C5A0" HeightRequest="8" WidthRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" />
+                        <Label Text="Anniversary" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6">
+                        <Border BackgroundColor="#C08552" HeightRequest="8" WidthRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" />
+                        <Label Text="Holiday" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="6">
+                        <Border BackgroundColor="#9B8AA8" HeightRequest="8" WidthRequest="8" StrokeShape="RoundRectangle 4" StrokeThickness="0" />
+                        <Label Text="Other" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                    </HorizontalStackLayout>
+                </HorizontalStackLayout>
+
+                <Label Text="Upcoming Events" FontAttributes="Bold" FontSize="17" TextColor="{StaticResource FloraCharcoal}" />
+
+                <Label x:Name="MonthSectionLabel" Text="This Month" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+
+                <VerticalStackLayout x:Name="EventsStack" Spacing="10" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Border x:Name="AddButton"
+                BackgroundColor="{StaticResource FloraBlush}"
+                HeightRequest="56"
+                WidthRequest="56"
+                StrokeShape="RoundRectangle 28"
+                StrokeThickness="0"
+                HorizontalOptions="End"
+                VerticalOptions="End"
+                Margin="0,0,24,24">
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnAddReminderTapped" />
+            </Border.GestureRecognizers>
+            <Label Text="+"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="White"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center"
+                   LineHeight="1"
+                   Margin="0,-2,0,0" />
+        </Border>
+
+        <!-- Add Reminder overlay -->
+        <Grid x:Name="AddReminderOverlay" IsVisible="False" BackgroundColor="#66000000">
+            <Border VerticalOptions="End"
+                    BackgroundColor="{StaticResource FloraCream}"
+                    StrokeShape="RoundRectangle 24,24,0,0"
+                    Padding="24"
+                    StrokeThickness="0">
+                <VerticalStackLayout Spacing="16">
+
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Add Reminder" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+                        <Label Grid.Column="1" Text="&#xE711;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCloseAddReminderTapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Event Name" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                        <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 12" Padding="14,0" HeightRequest="48" StrokeThickness="0">
+                            <Entry x:Name="EventNameEntry" Placeholder="e.g. Mum's Birthday" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" VerticalOptions="Center" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Type" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                        <FlexLayout x:Name="TypeSelectorStack" Wrap="Wrap" JustifyContent="Start" AlignItems="Start" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label x:Name="DayFieldLabel" Text="Day (June)" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                        <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 12" Padding="14,0" HeightRequest="48" StrokeThickness="0">
+                            <Entry x:Name="DayEntry" Placeholder="e.g. 15" Keyboard="Numeric" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" VerticalOptions="Center" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="52" Margin="0,8,0,0">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnSaveReminderTapped" />
+                        </Border.GestureRecognizers>
+                        <Label Text="Save Reminder" FontAttributes="Bold" FontSize="16" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

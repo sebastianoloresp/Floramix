@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="FloraMix.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:onboarding="clr-namespace:FloraMix.Views.Onboarding"
+    xmlns:auth="clr-namespace:FloraMix.Views.Auth"
+    xmlns:main="clr-namespace:FloraMix.Views.Main"
+    Shell.FlyoutBehavior="Disabled"
+    Title="FloraMix">
+
+    <ShellContent
+        Route="onboarding"
+        ContentTemplate="{DataTemplate onboarding:OnboardingPage}"
+        Shell.NavBarIsVisible="False" />
+
+    <ShellContent
+        Route="role"
+        ContentTemplate="{DataTemplate onboarding:RoleSelectionPage}"
+        Shell.NavBarIsVisible="False" />
+
+    <ShellContent
+        Route="auth"
+        ContentTemplate="{DataTemplate auth:AuthPage}"
+        Shell.NavBarIsVisible="False" />
+
+    <TabBar Route="maintabs">
+        <ShellContent
+            Route="home"
+            Title="Home"
+            Icon="home_icon.png"
+            ContentTemplate="{DataTemplate main:HomePage}"
+            Shell.NavBarIsVisible="False" />
+        <ShellContent
+            Route="build"
+            Title="Build"
+            Icon="build_icon.png"
+            ContentTemplate="{DataTemplate main:BouquetBuilderPage}"
+            Shell.NavBarIsVisible="False" />
+        <ShellContent
+            Route="cart"
+            Title="Cart"
+            Icon="cart_icon.png"
+            ContentTemplate="{DataTemplate main:CartPage}"
+            Shell.NavBarIsVisible="False" />
+        <ShellContent
+            Route="reminders"
+            Title="Reminders"
+            Icon="reminders_icon.png"
+            ContentTemplate="{DataTemplate main:RemindersPage}"
+            Shell.NavBarIsVisible="False" />
+        <ShellContent
+            Route="profile"
+            Title="Profile"
+            Icon="profile_icon.png"
+            ContentTemplate="{DataTemplate main:ProfilePage}"
+            Shell.NavBarIsVisible="False" />
+    </TabBar>
+
+</Shell>

@@ -1,0 +1,183 @@
+/* Blazor CSS isolation — scoped automatically to NavMenu.razor's markup.
+   Assumes this component is rendered inside a white sidebar panel
+   provided by your layout (MainLayout), so no outer background/width
+   is set here — just the internal spacing, type, and colors. */
+
+.brand-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 4px 18px;
+    font-family: 'Open Sans', 'Segoe UI', sans-serif;
+}
+
+.brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #F7B9CC, #EE8FAE);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.brand-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.1;
+    color: #2E2B3D;
+}
+
+.brand-sub {
+    font-size: 12px;
+    color: #6B6B63;
+}
+
+.shop-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #EFE7DC;
+    border-radius: 16px;
+    padding: 10px 12px;
+    margin-bottom: 18px;
+}
+
+.shop-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #E7A9A0, #C98CA6);
+    flex-shrink: 0;
+}
+
+.shop-info {
+    min-width: 0;
+}
+
+.shop-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #2E2B6B;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.shop-location {
+    font-size: 11px;
+    color: #8B7B6A;
+}
+
+.shop-online-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4CAF6D;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.nav-scrollable {
+    border-top: 1px solid #EFEAE3;
+    padding-top: 10px;
+}
+
+.nav-item {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 2px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    color: #7A7065;
+    font-family: 'Open Sans', 'Segoe UI', sans-serif;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+    .nav-link:hover {
+        background: #F5F1EC;
+        color: #5A5148;
+    }
+
+    .nav-link.active {
+        background: #FDEEF2;
+        color: #D9628A;
+        font-weight: 600;
+    }
+
+.nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+    .nav-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+.nav-badge {
+    margin-left: auto;
+    background: #F2A7BD;
+    color: #FFFFFF;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+}
+
+.nav-link.active .nav-badge {
+    background: #D9628A;
+}
+
+/* Mobile hamburger toggle — hidden on desktop, shown under 768px,
+   matching the standard Blazor template pattern this component came from. */
+.navbar-toggler {
+    display: none;
+}
+
+@media (max-width: 767.98px) {
+    .navbar-toggler {
+        display: block;
+        appearance: none;
+        width: 34px;
+        height: 34px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        border: 1px solid #ECE7E1;
+        background: #FFFFFF;
+        cursor: pointer;
+    }
+
+    .nav-scrollable {
+        display: none;
+    }
+
+    .navbar-toggler:checked ~ .nav-scrollable {
+        display: block;
+    }
+}

@@ -1,0 +1,266 @@
+﻿@page "/"
+@inject IShopService ShopService
+
+<div class="mb-4">
+    <h2 class="mb-0">Overview</h2>
+    <div class="text-muted">@DateTime.Now.ToString("dddd, MMMM d, yyyy")</div>
+</div>
+
+@if (orders is null || bouquets is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="stat-grid mb-4">
+        <div class="stat-card highlight">
+            <div class="stat-top">
+                <span>Today's Revenue</span>
+                <span class="stat-icon">↗</span>
+            </div>
+            <div class="stat-value">@Php(todaysRevenue)</div>
+            <div class="stat-sub @(revenueChangePct >= 0 ? "up" : "down")">@FormatSignedPercent(revenueChangePct) vs yesterday</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="text-muted">Orders Today</span>
+                <span class="stat-icon">🛍</span>
+            </div>
+            <div class="stat-value">@todaysOrders.Count</div>
+            <div class="stat-sub text-muted">@pendingCount pending</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="text-muted">Avg Order Value</span>
+                <span class="stat-icon">↗</span>
+            </div>
+            <div class="stat-value">@Php(avgOrderValue)</div>
+            <div class="stat-sub @(avgOrderChange >= 0 ? "up" : "down")">@FormatSignedCurrency(avgOrderChange) vs last week</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-top">
+                <span class="text-muted">Delivered Today</span>
+                <span class="stat-icon">✓</span>
+            </div>
+            <div class="stat-value">@deliveredToday</div>
+            <div class="stat-sub text-muted">On time rate: @onTimeRate.ToString("0")%</div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-lg-8">
+            <div class="panel">
+                <div class="d-flex justify-content-between mb-3">
+                    <div class="panel-title">Recent Orders</div>
+                    <a href="/orders" class="view-all">View all ›</a>
+                </div>
+                <table class="table orders-table">
+                    <thead>
+                        <tr>
+                            <th>Order</th>
+                            <th>Customer</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in recentOrders)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="order-code">@order.OrderCode</div>
+                                    <div class="order-sub text-muted">@(order.Items.FirstOrDefault()?.BouquetName ?? "-")</div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span class="mini-avatar">@Initials(order.CustomerName)</span>
+                                        @order.CustomerName
+                                    </div>
+                                </td>
+                                <td>@Php(order.Total)</td>
+                                <td><span class="badge-status @StatusClass(order.Status)">● @order.Status</span></td>
+                                <td>
+                                    @if (NextAction(order.Status) is { } action)
+                                    {
+                                        <button class="action-link" @onclick="() => AdvanceStatus(order)">@action</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="panel">
+                <div class="panel-title mb-3">
+                    <span class="alert-title-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8" />
+                            <path d="M12 7.5V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                            <circle cx="12" cy="16.2" r="1" fill="currentColor" />
+                        </svg>
+                    </span>
+                    Inventory Alerts
+                </div>
+                <ul class="alert-list">
+                    @foreach (var b in lowStockBouquets)
+                    {
+                        <li>
+                            @if (!string.IsNullOrWhiteSpace(b.ImageUrl))
+                            {
+                                <img src="@b.ImageUrl" alt="@b.Name" class="mini-avatar bouquet-photo" />
+                            }
+                            else
+                            {
+                                <span class="mini-avatar bouquet">@Initials(b.Name)</span>
+                            }
+                            <div class="alert-info">
+                                <div class="alert-name">@b.Name</div>
+                                <div class="alert-stock @(b.StockCount == 0 ? "out" : "")">
+                                    @(b.StockCount == 0 ? "Out of stock" : $"{b.StockCount} left")
+                                </div>
+                            </div>
+                            <a href="/bouquets" class="action-link">Restock</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    List<Order>? orders;
+    List<Bouquet>? bouquets;
+    List<Order> todaysOrders = new();
+    List<Order> recentOrders = new();
+    List<Bouquet> lowStockBouquets = new();
+    int pendingCount;
+    int deliveredToday;
+    decimal todaysRevenue;
+    decimal avgOrderValue;
+    decimal avgOrderChange;
+    double revenueChangePct;
+    double onTimeRate = 100;
+    int shopId = 1; // TODO: replace with logged-in owner's shop
+
+    protected override async Task OnInitializedAsync()
+    {
+        var allOrders = await ShopService.GetOrdersAsync(shopId);
+        bouquets = await ShopService.GetBouquetsAsync(shopId);
+
+        // Exclude archived orders everywhere on the dashboard, same as the Orders page does,
+        // so stats and Recent Orders always stay in sync with what's actually "active."
+        orders = allOrders.Where(o => !o.IsArchived).ToList();
+
+        // Recent Orders reflects whatever active orders actually exist, most recent first —
+        // no artificial cap, so it always matches the real order count.
+        recentOrders = orders
+            .OrderByDescending(o => o.CreatedAt)
+            .ToList();
+
+        // "Today" is anchored to the most recent order date in the data rather than the
+        // literal calendar date, so the dashboard stays meaningful for demo/seed data
+        // and automatically tracks real "today" once live orders start coming in.
+        var referenceDate = orders.Count > 0
+            ? orders.Max(o => o.CreatedAt.Date)
+            : DateTime.UtcNow.Date;
+        var yesterday = referenceDate.AddDays(-1);
+
+        todaysOrders = orders.Where(o => o.CreatedAt.Date == referenceDate).ToList();
+        pendingCount = todaysOrders.Count(o => o.Status == OrderStatus.Pending);
+        deliveredToday = todaysOrders.Count(o => o.Status == OrderStatus.Delivered);
+
+        // Revenue excludes cancelled orders since no money was actually taken for them.
+        todaysRevenue = todaysOrders
+            .Where(o => o.Status != OrderStatus.Cancelled)
+            .Sum(o => o.Total);
+
+        var yesterdaysRevenue = orders
+            .Where(o => o.CreatedAt.Date == yesterday && o.Status != OrderStatus.Cancelled)
+            .Sum(o => o.Total);
+
+        revenueChangePct = yesterdaysRevenue > 0
+            ? (double)((todaysRevenue - yesterdaysRevenue) / yesterdaysRevenue) * 100
+            : (todaysRevenue > 0 ? 100 : 0);
+
+        avgOrderValue = orders.Count > 0 ? orders.Average(o => o.Total) : 0;
+
+        // Compare the trailing 7-day average order value to the 7 days before that.
+        var weekStart = referenceDate.AddDays(-6);
+        var prevWeekStart = weekStart.AddDays(-7);
+        var prevWeekEnd = weekStart.AddDays(-1);
+
+        var thisWeekOrders = orders.Where(o => o.CreatedAt.Date >= weekStart && o.CreatedAt.Date <= referenceDate).ToList();
+        var lastWeekOrders = orders.Where(o => o.CreatedAt.Date >= prevWeekStart && o.CreatedAt.Date <= prevWeekEnd).ToList();
+
+        avgOrderChange = lastWeekOrders.Count > 0
+            ? thisWeekOrders.Average(o => o.Total) - lastWeekOrders.Average(o => o.Total)
+            : 0;
+
+        // "On time" = delivered successfully out of everything that has reached a final state.
+        var completedOrders = orders.Count(o => o.Status is OrderStatus.Delivered or OrderStatus.Cancelled);
+        onTimeRate = completedOrders > 0
+            ? (double)orders.Count(o => o.Status == OrderStatus.Delivered) / completedOrders * 100
+            : 100;
+
+        lowStockBouquets = bouquets
+            .Where(b => b.Status == ProductStatus.LowStock || b.Status == ProductStatus.OutOfStock)
+            .OrderBy(b => b.Status == ProductStatus.OutOfStock ? 0 : 1)
+            .ThenBy(b => b.StockCount)
+            .Take(4)
+            .ToList();
+    }
+
+    string Php(decimal amount) => "₱" + amount.ToString("N2");
+
+    string FormatSignedPercent(double pct) => (pct >= 0 ? "+" : "-") + Math.Abs(pct).ToString("0") + "%";
+
+    string FormatSignedCurrency(decimal amount) => (amount >= 0 ? "+" : "-") + Php(Math.Abs(amount));
+
+    string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return new string(parts.Take(2).Select(p => p[0]).ToArray()).ToUpper();
+    }
+
+    string StatusClass(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "pending",
+        OrderStatus.Confirmed => "preparing",
+        OrderStatus.Preparing => "preparing",
+        OrderStatus.Ready => "ready",
+        OrderStatus.Delivered => "delivered",
+        _ => "pending"
+    };
+
+    string? NextAction(OrderStatus status) => status switch
+    {
+        OrderStatus.Pending => "Mark Preparing",
+        OrderStatus.Confirmed => "Mark Preparing",
+        OrderStatus.Preparing => "Mark Ready",
+        OrderStatus.Ready => "Mark Delivered",
+        _ => null
+    };
+
+    async Task AdvanceStatus(Order order)
+    {
+        var next = order.Status switch
+        {
+            OrderStatus.Pending => OrderStatus.Preparing,
+            OrderStatus.Confirmed => OrderStatus.Preparing,
+            OrderStatus.Preparing => OrderStatus.Ready,
+            OrderStatus.Ready => OrderStatus.Delivered,
+            _ => order.Status
+        };
+
+        await ShopService.UpdateOrderStatusAsync(order.Id, next);
+        order.Status = next;
+    }
+}

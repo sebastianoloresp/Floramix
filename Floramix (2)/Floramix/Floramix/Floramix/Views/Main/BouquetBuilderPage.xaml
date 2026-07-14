@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.BouquetBuilderPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Label Text="Bouquet Builder" FontSize="13" TextColor="{StaticResource FloraMuted}" />
+            <Label Text="Create Your Bouquet" FontFamily="Serif" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+
+            <!-- Progress bar: 5 segments -->
+            <Grid ColumnDefinitions="*,*,*,*,*" ColumnSpacing="6">
+                <Border x:Name="Segment0" Grid.Column="0" HeightRequest="6" StrokeShape="RoundRectangle 3" StrokeThickness="0" BackgroundColor="{StaticResource FloraBlush}" />
+                <Border x:Name="Segment1" Grid.Column="1" HeightRequest="6" StrokeShape="RoundRectangle 3" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}" />
+                <Border x:Name="Segment2" Grid.Column="2" HeightRequest="6" StrokeShape="RoundRectangle 3" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}" />
+                <Border x:Name="Segment3" Grid.Column="3" HeightRequest="6" StrokeShape="RoundRectangle 3" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}" />
+                <Border x:Name="Segment4" Grid.Column="4" HeightRequest="6" StrokeShape="RoundRectangle 3" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*,*,*,*">
+                <Label x:Name="LabelStepFlowers" Grid.Column="0" Text="Flowers" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource FloraBlush}" HorizontalOptions="Center" />
+                <Label x:Name="LabelStepColors" Grid.Column="1" Text="Colors" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                <Label x:Name="LabelStepFillers" Grid.Column="2" Text="Fillers" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                <Label x:Name="LabelStepWrapping" Grid.Column="3" Text="Wrapping" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                <Label x:Name="LabelStepAddOns" Grid.Column="4" Text="Add-ons" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+            </Grid>
+
+            <!-- Live price badge -->
+            <Border StrokeShape="RoundRectangle 20" StrokeThickness="0" HeightRequest="220">
+                <GraphicsView x:Name="BouquetPreview" HeightRequest="220" />
+            </Border>
+
+            <!-- Live price badge -->
+            <Border HeightRequest="100" WidthRequest="100" StrokeShape="RoundRectangle 50" BackgroundColor="{StaticResource FloraBlush}" StrokeThickness="0" HorizontalOptions="Center" Margin="0,-40,0,0">
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="0">
+                    <Label Text="&#x1F338;" FontSize="22" TextColor="White" HorizontalOptions="Center" />
+                    <Label x:Name="PriceBadgeLabel" Text="₱0" FontAttributes="Bold" FontSize="16" TextColor="White" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- STEP 1: Flowers -->
+            <VerticalStackLayout x:Name="StepFlowers" Spacing="16">
+                <Label Text="Select your flowers (tap to add):" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+                <Grid x:Name="FlowerGrid" ColumnDefinitions="*,*,*" ColumnSpacing="12" RowSpacing="12" RowDefinitions="Auto,Auto" />
+
+                <VerticalStackLayout x:Name="StemsSection" Spacing="10" IsVisible="False">
+                    <Label Text="Stems per flower:" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                    <VerticalStackLayout x:Name="StemsStack" Spacing="10" />
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- STEP 2: Colors -->
+            <VerticalStackLayout x:Name="StepColors" Spacing="16" IsVisible="False">
+                <Label Text="Choose your color palette (up to 4):" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+                <Grid x:Name="ColorGrid" ColumnDefinitions="*,*,*" ColumnSpacing="12" RowSpacing="12" RowDefinitions="Auto,Auto,Auto,Auto" />
+            </VerticalStackLayout>
+
+            <!-- STEP 3: Fillers -->
+            <VerticalStackLayout x:Name="StepFillers" Spacing="16" IsVisible="False">
+                <Label Text="Add filler flowers &amp; greenery:" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+                <VerticalStackLayout x:Name="FillersStack" Spacing="12" />
+            </VerticalStackLayout>
+
+            <!-- STEP 4: Wrapping -->
+            <VerticalStackLayout x:Name="StepWrapping" Spacing="16" IsVisible="False">
+                <Label Text="Choose how to wrap your bouquet:" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+                <VerticalStackLayout x:Name="WrappingStack" Spacing="12" />
+            </VerticalStackLayout>
+
+            <!-- STEP 5: Add-ons -->
+            <VerticalStackLayout x:Name="StepAddOns" Spacing="16" IsVisible="False">
+                <Label Text="Complete your gift with add-ons:" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+                <VerticalStackLayout x:Name="AddOnsStack" Spacing="12" />
+            </VerticalStackLayout>
+
+            <!-- Navigation buttons -->
+            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="12" Margin="0,12,0,0">
+                <Border x:Name="BackButton" Grid.Column="0" BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 20" Padding="24,0" HeightRequest="52" IsVisible="False">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Back" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <Border Grid.Column="1" BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 20" HeightRequest="52">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnNextTapped" />
+                    </Border.GestureRecognizers>
+                    <Label x:Name="NextButtonLabel" Text="Next" FontAttributes="Bold" FontSize="16" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

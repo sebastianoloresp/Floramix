@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.EditProfilePage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="18" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCancelTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="Settings" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Label Text="ACCOUNT" FontSize="11" FontAttributes="Bold" CharacterSpacing="1" TextColor="{StaticResource FloraBlush}" />
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Full Name" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="FullNameEntry" BackgroundColor="Transparent" Margin="8,0" TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Email" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="EmailEntry" Keyboard="Email" BackgroundColor="Transparent" Margin="8,0" TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Phone" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="PhoneEntry" Keyboard="Telephone" BackgroundColor="Transparent" Margin="8,0" TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Address" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="White" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="LocationEntry" BackgroundColor="Transparent" Margin="8,0" TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </VerticalStackLayout>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12" Margin="0,10,0,0">
+                <Border Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 24" Stroke="{StaticResource FloraFieldBg}" StrokeThickness="1" HeightRequest="50">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCancelTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Cancel" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="50" StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSaveTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="Save" FontAttributes="Bold" FontSize="15" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.AddAddressPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Spacing="18" Padding="24,56,24,24">
+
+            <Grid ColumnDefinitions="Auto,*">
+                <Border Grid.Column="0" HeightRequest="36" WidthRequest="36" StrokeShape="RoundRectangle 18" StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Border.GestureRecognizers>
+                    <Label Text="&#xE76B;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label x:Name="TitleLabel" Grid.Column="1" Text="Add New Address" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" Margin="12,0,0,0" VerticalOptions="Center" />
+            </Grid>
+
+            <Label Text="Address Type" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+                <Border x:Name="HomeTypeBorder" Grid.Column="0" BackgroundColor="White" Stroke="{StaticResource FloraFieldBg}" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="0,14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHomeTypeTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="HomeTypeIcon" Text="&#xE80F;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                        <Label x:Name="HomeTypeLabel" Text="Home" FontSize="13" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border x:Name="WorkTypeBorder" Grid.Column="1" BackgroundColor="White" Stroke="{StaticResource FloraFieldBg}" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="0,14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnWorkTypeTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="WorkTypeIcon" Text="&#xE821;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                        <Label x:Name="WorkTypeLabel" Text="Work" FontSize="13" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+                <Border x:Name="OtherTypeBorder" Grid.Column="2" BackgroundColor="White" Stroke="{StaticResource FloraFieldBg}" StrokeThickness="1" StrokeShape="RoundRectangle 14" Padding="0,14">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnOtherTypeTapped" />
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
+                        <Label x:Name="OtherTypeIcon" Text="&#xE81D;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                        <Label x:Name="OtherTypeLabel" Text="Other" FontSize="13" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Label (e.g. Home, Mum's)" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="LabelEntry" Placeholder="Home" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Street Address" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="StreetEntry" Placeholder="12 Kensington Gardens Square" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Apartment / Flat (optional)" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="ApartmentEntry" Placeholder="Flat 3" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="City" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="CityEntry" Placeholder="London" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" />
+                </Border>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Postcode" FontSize="13" TextColor="{StaticResource FloraCharcoal}" />
+                <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 14" StrokeThickness="0">
+                    <Entry x:Name="PostcodeEntry" Placeholder="W2 4BH" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" Margin="8,0" />
+                </Border>
+            </VerticalStackLayout>
+
+            <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="52" StrokeThickness="0" Margin="0,10,0,0">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSaveTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="Save Address" FontAttributes="Bold" FontSize="15" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

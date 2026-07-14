@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.ChatPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <Grid Grid.Row="0" Padding="16,56,16,16" BackgroundColor="White" ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+            <Label Grid.Column="0" Text="&#xE72B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Border Grid.Column="1" HeightRequest="40" WidthRequest="40" StrokeShape="RoundRectangle 20" StrokeThickness="0" BackgroundColor="{StaticResource FloraBlush}" Margin="12,0,0,0">
+                <Label Text="&#xE77B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+            <VerticalStackLayout Grid.Column="2" Spacing="1" Margin="12,0,0,0" VerticalOptions="Center">
+                <Label x:Name="ShopNameLabel" Text="La Petite Fleur" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+                <Label x:Name="OnlineStatusLabel" Text="Online now" FontSize="11" TextColor="#5B8C5A" />
+            </VerticalStackLayout>
+            <Label Grid.Column="3" Text="&#xE717;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center" Margin="0,0,12,0" />
+            <Label Grid.Column="4" Text="&#xE712;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout x:Name="MessagesStack" Padding="16" Spacing="14" />
+        </ScrollView>
+
+        <Grid Grid.Row="2" Padding="12,10" BackgroundColor="White" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+            <Label Grid.Column="0" Text="&#xE722;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraMuted}" VerticalOptions="Center" />
+            <Border Grid.Column="1" BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 20" StrokeThickness="0" Padding="14,0" HeightRequest="44">
+                <Entry x:Name="MessageEntry" Placeholder="Type a message..." PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" VerticalOptions="Center" />
+            </Border>
+            <Border Grid.Column="2" HeightRequest="44" WidthRequest="44" StrokeShape="RoundRectangle 22" StrokeThickness="0" BackgroundColor="{StaticResource FloraBlush}">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnSendTapped" />
+                </Border.GestureRecognizers>
+                <Label Text="&#xE724;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+            </Border>
+        </Grid>
+
+    </Grid>
+</ContentPage>

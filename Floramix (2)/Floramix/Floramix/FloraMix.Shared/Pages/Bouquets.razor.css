@@ -1,0 +1,466 @@
+/* --- Page header --- */
+.products-header {
+    margin-bottom: 1rem;
+}
+
+    .products-header h1 {
+        font-size: 1.7rem;
+        font-weight: 700;
+        color: #2a2a2a;
+        margin: 0;
+    }
+
+.products-subtitle {
+    font-size: 0.85rem;
+    color: #9a9a9a;
+    margin-top: 0.15rem;
+}
+
+/* --- Toolbar --- */
+.products-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.products-count {
+    color: #6b6b6b;
+    font-size: 0.9rem;
+}
+
+.btn-add-product {
+    background: #f472a0;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.6rem 1.25rem;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+    .btn-add-product:hover {
+        background: #ee5f96;
+        transform: translateY(-1px);
+    }
+
+/* --- Two-column layout: product grid (left) + form sidebar (right) --- */
+.products-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+}
+
+.products-main-col {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.products-form-col {
+    flex: 0 0 360px;
+    position: sticky;
+    top: 1rem;
+}
+
+@media (max-width: 900px) {
+    .products-layout {
+        flex-direction: column;
+    }
+
+    .products-form-col {
+        flex: 1 1 auto;
+        width: 100%;
+        position: static;
+        order: -1;
+    }
+}
+
+/* --- Grid --- */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+.products-grid-narrow {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (max-width: 1300px) {
+    .products-grid-narrow {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1100px) {
+    .products-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .products-grid,
+    .products-grid-narrow {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- Card --- */
+.product-card {
+    background: #ffffff;
+    border: 1px solid #eee9e7;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.product-image {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #f4f2f1;
+}
+
+    .product-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+.product-image-fallback {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+}
+
+.grad-romance {
+    background: linear-gradient(135deg, #f7c6d9, #f4a8c4);
+}
+
+.grad-wedding {
+    background: linear-gradient(135deg, #e8dff5, #d9c7ee);
+}
+
+.grad-birthday {
+    background: linear-gradient(135deg, #fde7c7, #fbd28f);
+}
+
+.grad-sympathy {
+    background: linear-gradient(135deg, #dcebe0, #bcd8c4);
+}
+
+.grad-other {
+    background: linear-gradient(135deg, #eee9e7, #ddd6d3);
+}
+
+/* --- Status tag --- */
+.status-tag {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+}
+
+    .status-tag.active {
+        background: #dff5e5;
+        color: #1f8a4c;
+    }
+
+    .status-tag.low-stock {
+        background: #fdf0d5;
+        color: #a06b12;
+    }
+
+    .status-tag.out-of-stock {
+        background: #fbe0e4;
+        color: #c8394f;
+    }
+
+/* --- Hover actions --- */
+.product-hover-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 0.4rem;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.product-card:hover .product-hover-actions {
+    opacity: 1;
+}
+
+.round-icon-btn {
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+    .round-icon-btn:hover {
+        background: #ffffff;
+    }
+
+/* --- Info section --- */
+.product-info {
+    padding: 1rem 1.1rem;
+}
+
+.product-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.product-name {
+    font-weight: 700;
+    color: #2a2a2a;
+    font-size: 1rem;
+}
+
+.product-category {
+    font-size: 0.78rem;
+    color: #d94f7c;
+    margin-top: 0.1rem;
+}
+
+.product-price {
+    font-weight: 700;
+    color: #2a2a2a;
+    white-space: nowrap;
+}
+
+.product-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: #6b6b6b;
+    margin-top: 0.6rem;
+}
+
+.meta-rating {
+    color: #b7871f;
+    font-weight: 600;
+}
+
+.meta-dot {
+    color: #d5d0ce;
+}
+
+.meta-stock.out {
+    color: #d1495b;
+    font-weight: 600;
+}
+
+/* --- Card action links --- */
+.product-actions-row {
+    display: flex;
+    gap: 0.9rem;
+    margin-top: 0.75rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid #f5f2f0;
+}
+
+.link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #3d6fc9;
+    cursor: pointer;
+}
+
+    .link-btn.danger {
+        color: #d1495b;
+    }
+
+    .link-btn:hover {
+        text-decoration: underline;
+    }
+
+/* --- Edit / add form card --- */
+.product-form-card {
+    background: #ffffff;
+    border: 1px solid #eee9e7;
+    border-radius: 18px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(40, 30, 30, 0.06);
+}
+
+.form-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #f2eeec;
+}
+
+    .form-card-header h5 {
+        font-weight: 700;
+        font-size: 1.05rem;
+        color: #2a2a2a;
+        margin: 0;
+    }
+
+.form-close-btn {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    border: none;
+    background: #f6f3f2;
+    color: #8a8a8a;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+    .form-close-btn:hover {
+        background: #fbe0e4;
+        color: #c8394f;
+    }
+
+.form-section {
+    margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #f5f2f0;
+}
+
+    .form-section:last-of-type {
+        border-bottom: none;
+        padding-bottom: 0;
+        margin-bottom: 1.25rem;
+    }
+
+.form-row {
+    margin-bottom: 0.9rem;
+    flex: 1;
+}
+
+    .form-row:last-child {
+        margin-bottom: 0;
+    }
+
+    .form-row label {
+        display: block;
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: #a39a97;
+        margin-bottom: 0.35rem;
+    }
+
+    .form-row .form-control {
+        width: 100%;
+        border: 1px solid #e7e3e1;
+        border-radius: 10px;
+        padding: 0.6rem 0.8rem;
+        font-size: 0.88rem;
+        color: #2a2a2a;
+        background: #fbfaf9;
+        transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+        .form-row .form-control:focus {
+            outline: none;
+            border-color: #f472a0;
+            background: #ffffff;
+        }
+
+    .form-row textarea.form-control {
+        resize: vertical;
+        min-height: 4.5rem;
+    }
+
+.form-row-group {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+}
+
+    .form-row-group .form-row {
+        margin-bottom: 0;
+    }
+
+.checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+    .checkbox-row input[type="checkbox"] {
+        width: 1.05rem;
+        height: 1.05rem;
+        accent-color: #f472a0;
+        cursor: pointer;
+    }
+
+    .checkbox-row label {
+        margin-bottom: 0;
+        text-transform: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #4a4a4a;
+        cursor: pointer;
+    }
+
+.form-actions {
+    display: flex;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+}
+
+.btn-save {
+    flex: 1;
+    background: #f472a0;
+    color: #ffffff;
+    border: none;
+    border-radius: 10px;
+    padding: 0.65rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease;
+}
+
+    .btn-save:hover {
+        background: #ee5f96;
+        transform: translateY(-1px);
+    }
+
+.btn-cancel-form {
+    background: #ffffff;
+    border: 1px solid #e7e3e1;
+    border-radius: 10px;
+    padding: 0.65rem 1.1rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: #6b6b6b;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+    .btn-cancel-form:hover {
+        background: #f6f3f2;
+    }

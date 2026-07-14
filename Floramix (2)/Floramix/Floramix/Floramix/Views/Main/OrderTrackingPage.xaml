@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.OrderTrackingPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Label Grid.Column="0" Text="&#xE72B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="12,0,0,0">
+                    <Label Text="Track Order" FontFamily="Serif" FontSize="22" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+                    <Label x:Name="OrderNumberLabel" Text="Order #FM-2847" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                </VerticalStackLayout>
+                <Border Grid.Column="2" BackgroundColor="#FDEEF1" StrokeShape="RoundRectangle 12" Padding="10,4" StrokeThickness="0">
+                    <Label x:Name="StatusBadgeLabel" Text="Preparing" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource FloraBlush}" />
+                </Border>
+            </Grid>
+
+            <Border BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 20" HeightRequest="180" StrokeThickness="0">
+                <WebView x:Name="DeliveryMapView" HeightRequest="180" />
+            </Border>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 20" Padding="12" StrokeThickness="0" Margin="0,-30,0,0">
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="&#xE81D;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                    <Label x:Name="DeliveryAddressLabel" Text="Paseo de Sta. Rosa, Sta. Rosa, Laguna" FontSize="12" TextColor="{StaticResource FloraCharcoal}" />
+                </HorizontalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="#FDEEF1" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Border Grid.Column="0" HeightRequest="44" WidthRequest="44" StrokeShape="RoundRectangle 22" StrokeThickness="0" BackgroundColor="{StaticResource FloraBlush}">
+                        <Label Text="&#xE823;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="White" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Border>
+                    <VerticalStackLayout Grid.Column="1" Spacing="2" Margin="14,0,0,0" VerticalOptions="Center">
+                        <Label Text="Estimated delivery" FontSize="12" TextColor="{StaticResource FloraMuted}" />
+                        <Label x:Name="EstimatedTimeLabel" Text="Today, 2:15 PM" FontFamily="Serif" FontSize="20" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+                        <Label Text="&#177; 15 minutes" FontSize="11" TextColor="{StaticResource FloraMuted}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                <VerticalStackLayout Spacing="14">
+                    <Label Text="Order Progress" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+                    <VerticalStackLayout x:Name="ProgressStack" Spacing="0" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Order Details" FontAttributes="Bold" FontSize="15" TextColor="{StaticResource FloraCharcoal}" />
+                    <VerticalStackLayout x:Name="OrderDetailsStack" Spacing="10" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                <Border Grid.Column="0" BackgroundColor="White" StrokeShape="RoundRectangle 24" HeightRequest="52" StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnMessageShopTapped" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                        <Label Text="&#xE8BD;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                        <Label Text="Message Shop" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraBlush}" />
+                    </HorizontalStackLayout>
+                </Border>
+                <Border Grid.Column="1" BackgroundColor="#A8C5A0" StrokeShape="RoundRectangle 24" HeightRequest="52" StrokeThickness="0">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnCallShopTapped" />
+                    </Border.GestureRecognizers>
+                    <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                        <Label Text="&#xE717;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                        <Label Text="Call Shop" FontAttributes="Bold" FontSize="14" TextColor="White" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+
+            <Border x:Name="CancelOrderButton" BackgroundColor="White" Stroke="#D9534F" StrokeThickness="1.5" StrokeShape="RoundRectangle 24" HeightRequest="52">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCancelOrderTapped" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="&#xE711;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="#D9534F" />
+                    <Label Text="Cancel Order" FontAttributes="Bold" FontSize="14" TextColor="#D9534F" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.MessagesPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Label Text="Stay connected" FontSize="13" TextColor="{StaticResource FloraMuted}" />
+            <Label Text="Messages" FontFamily="Serif" FontSize="26" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" />
+
+            <Border StrokeThickness="0" BackgroundColor="{StaticResource FloraFieldBg}" Padding="16,0" HeightRequest="48" StrokeShape="RoundRectangle 16">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Label Grid.Column="0" Text="&#xE721;" FontFamily="Segoe Fluent Icons" FontSize="15" TextColor="{StaticResource FloraMuted}" Margin="0,0,10,0" VerticalOptions="Center" />
+                    <Entry Grid.Column="1" Placeholder="Search messages..." PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" VerticalOptions="Center" />
+                </Grid>
+            </Border>
+
+            <VerticalStackLayout x:Name="ConversationsStack" Spacing="12" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

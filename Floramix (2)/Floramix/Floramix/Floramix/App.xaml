@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.App">
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="CreamBg">#FBF6F1</Color>
+            <Color x:Key="CharcoalText">#3A3530</Color>
+            <Color x:Key="MutedGray">#9B9186</Color>
+            <Color x:Key="BlushPink">#E8919E</Color>
+            <Color x:Key="FloraBlush">#E8919E</Color>
+            <Color x:Key="FloraBlushDark">#D4707F</Color>
+            <Color x:Key="FloraCream">#FBF6F1</Color>
+            <Color x:Key="FloraCharcoal">#3A3530</Color>
+            <Color x:Key="FloraMuted">#9B9186</Color>
+            <Color x:Key="FloraFieldBg">#F0EAE3</Color>
+
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

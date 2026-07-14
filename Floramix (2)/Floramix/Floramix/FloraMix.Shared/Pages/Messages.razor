@@ -1,0 +1,181 @@
+﻿@page "/messages"
+@inject IShopService ShopService
+
+<div class="msg-page">
+    <div class="msg-header">
+        <h1>Messages</h1>
+        <div class="msg-subtitle">@(shop?.Name ?? "Shop") · Shop Portal</div>
+    </div>
+
+    @if (conversations is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="msg-layout">
+            <div class="msg-conversations">
+                <div class="msg-search">
+                    <span class="search-icon">🔍</span>
+                    <input placeholder="Search..." value="@searchTerm" @oninput="OnSearchInput" />
+                </div>
+
+                <div class="msg-list">
+                    @foreach (var c in FilteredConversations)
+                    {
+                        var unread = c.Messages.Count(m => m.Sender == MessageSender.Customer && !m.IsRead);
+                        var last = c.Messages.OrderByDescending(m => m.SentAt).FirstOrDefault();
+
+                        <div class="msg-list-item @(selected?.Id == c.Id ? "active" : "")" @onclick="() => SelectConversation(c)">
+                            <span class="msg-avatar">@Initials(c.Order.CustomerName)</span>
+                            <div class="msg-list-body">
+                                <div class="msg-list-top">
+                                    <span class="msg-list-name">@c.Order.CustomerName</span>
+                                    <span class="msg-list-time">@(last is null ? "" : FormatTime(last.SentAt))</span>
+                                </div>
+                                <div class="msg-list-preview">@(last?.Text ?? "No messages yet")</div>
+                                <div class="msg-list-order">Order @c.Order.OrderCode</div>
+                            </div>
+                            @if (unread > 0)
+                            {
+                                <span class="msg-unread-dot">@unread</span>
+                            }
+                        </div>
+                    }
+
+                    @if (!FilteredConversations.Any())
+                    {
+                        <div class="msg-empty-list">No conversations found.</div>
+                    }
+                </div>
+            </div>
+
+            <div class="msg-thread">
+                @if (selected is null)
+                {
+                    <div class="msg-no-selection">Select a conversation to view messages.</div>
+                }
+                else
+                {
+                    <div class="msg-thread-header">
+                        <span class="msg-avatar">@Initials(selected.Order.CustomerName)</span>
+                        <div>
+                            <div class="msg-thread-name">@selected.Order.CustomerName</div>
+                            <div class="msg-thread-sub">Order @selected.Order.OrderCode</div>
+                        </div>
+                    </div>
+
+                    <div class="msg-thread-body">
+                        @foreach (var m in selected.Messages.OrderBy(m => m.SentAt))
+                        {
+                            <div class="msg-bubble-row @(m.Sender == MessageSender.Shop ? "outgoing" : "incoming")">
+                                <div class="msg-bubble">
+                                    @m.Text
+                                    <div class="msg-bubble-time">@FormatTime(m.SentAt)</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="msg-input-row">
+                        <input placeholder="Type a message..." value="@draftText" @oninput="OnDraftInput" @onkeydown="OnKeyDown" />
+                        <button class="msg-send-btn" @onclick="Send" disabled="@string.IsNullOrWhiteSpace(draftText)">➤</button>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    List<Conversation>? conversations;
+    Conversation? selected;
+    Shop? shop;
+    string searchTerm = "";
+    string draftText = "";
+    int shopId = 1; // TODO: replace with logged-in owner's shop
+
+    static readonly string[] AutoReplies = new[]
+    {
+        "Thanks so much for the update! 🌸",
+        "Sounds great, thank you!",
+        "Got it, appreciate the quick reply!",
+        "Perfect, thank you for letting me know!",
+        "Awesome, looking forward to it!"
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        shop = await ShopService.GetShopAsync(shopId);
+        await LoadConversations();
+    }
+
+    async Task LoadConversations()
+    {
+        conversations = await ShopService.GetConversationsAsync(shopId);
+        if (selected is not null)
+        {
+            selected = conversations.FirstOrDefault(c => c.Id == selected.Id);
+        }
+    }
+
+    IEnumerable<Conversation> FilteredConversations =>
+        (conversations ?? new())
+            .Where(c => string.IsNullOrWhiteSpace(searchTerm)
+                || c.Order.CustomerName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                || c.Order.OrderCode.Contains(searchTerm, StringComparison.OrdinalIgnoreCase));
+
+    void OnSearchInput(ChangeEventArgs e) => searchTerm = e.Value?.ToString() ?? "";
+    void OnDraftInput(ChangeEventArgs e) => draftText = e.Value?.ToString() ?? "";
+
+    async Task SelectConversation(Conversation c)
+    {
+        selected = c;
+        await ShopService.MarkConversationReadAsync(c.Id);
+        await LoadConversations();
+    }
+
+    async Task OnKeyDown(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            await Send();
+        }
+    }
+
+    async Task Send()
+    {
+        if (selected is null || string.IsNullOrWhiteSpace(draftText)) return;
+
+        var text = draftText;
+        draftText = "";
+
+        await ShopService.SendMessageAsync(selected.Id, MessageSender.Shop, text);
+        await LoadConversations();
+
+        // Simulate the customer replying, since there's no live customer-side chat yet.
+        _ = SimulateReplyAsync(selected.Id);
+    }
+
+    async Task SimulateReplyAsync(int conversationId)
+    {
+        await Task.Delay(Random.Shared.Next(1200, 2600));
+
+        var reply = AutoReplies[Random.Shared.Next(AutoReplies.Length)];
+        await ShopService.SendMessageAsync(conversationId, MessageSender.Customer, reply);
+        await InvokeAsync(async () =>
+        {
+            await LoadConversations();
+            StateHasChanged();
+        });
+    }
+
+    string Initials(string name)
+    {
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        var letters = parts.Take(2).Select(p => p[0]);
+        return new string(letters.ToArray()).ToUpper();
+    }
+
+    string FormatTime(DateTime dt) => dt.ToString("h:mm tt");
+}

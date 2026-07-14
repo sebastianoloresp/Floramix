@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FloraMix.Views.Main.CartPage"
+             BackgroundColor="{StaticResource FloraCream}">
+    <ScrollView VerticalScrollBarVisibility="Never">
+        <VerticalStackLayout Padding="24,56,24,24" Spacing="20">
+
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Label Grid.Column="0" Text="&#xE72B;" FontFamily="Segoe Fluent Icons" FontSize="18" TextColor="{StaticResource FloraCharcoal}" VerticalOptions="Center">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnBackTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+                <Label Grid.Column="1" Text="My Cart" FontFamily="Serif" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="Center" />
+                <Border Grid.Column="2" BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 12" Padding="10,4" StrokeThickness="0">
+                    <Label x:Name="ItemCountLabel" Text="2 items" FontSize="12" TextColor="{StaticResource FloraCharcoal}" />
+                </Border>
+            </Grid>
+
+            <Grid x:Name="StepIndicatorGrid" ColumnDefinitions="*,*,*,*" />
+
+            <VerticalStackLayout x:Name="CartItemsStack" Spacing="12" />
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                <VerticalStackLayout Spacing="10">
+                    <HorizontalStackLayout Spacing="8">
+                        <Label Text="&#xE8EC;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="{StaticResource FloraMuted}" />
+                        <Label Text="Promo Code" FontAttributes="Bold" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                    </HorizontalStackLayout>
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                        <Border Grid.Column="0" BackgroundColor="{StaticResource FloraFieldBg}" StrokeShape="RoundRectangle 12" Padding="14,0" HeightRequest="48" StrokeThickness="0">
+                            <Entry x:Name="PromoEntry" Placeholder="e.g. FLORA10" PlaceholderColor="{StaticResource FloraMuted}" TextColor="{StaticResource FloraCharcoal}" BackgroundColor="Transparent" VerticalOptions="Center" />
+                        </Border>
+                        <Border Grid.Column="1" BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 12" HeightRequest="48" WidthRequest="80" StrokeThickness="0">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnApplyPromoTapped" />
+                            </Border.GestureRecognizers>
+                            <Label Text="Apply" TextColor="White" FontAttributes="Bold" FontSize="14" HorizontalOptions="Center" VerticalOptions="Center" />
+                        </Border>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" StrokeShape="RoundRectangle 16" Padding="16" StrokeThickness="0">
+                <VerticalStackLayout Spacing="10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label x:Name="SubtotalTitleLabel" Text="Subtotal (2 items)" FontSize="14" TextColor="{StaticResource FloraCharcoal}" />
+                        <Label Grid.Column="1" x:Name="SubtotalLabel" Text="₱3,449" FontSize="14" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="End" />
+                    </Grid>
+                    <Grid ColumnDefinitions="Auto,*,Auto">
+                        <Label Text="&#xE7C3;" FontFamily="Segoe Fluent Icons" FontSize="13" TextColor="{StaticResource FloraMuted}" />
+                        <Label Grid.Column="1" Text="Delivery" FontSize="14" TextColor="{StaticResource FloraCharcoal}" Margin="8,0,0,0" />
+                        <Label Grid.Column="2" x:Name="DeliveryLabel" Text="₱100" FontSize="14" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="End" />
+                    </Grid>
+                    <Grid x:Name="DiscountRow" ColumnDefinitions="*,Auto" IsVisible="False">
+                        <Label Text="Discount" FontSize="14" TextColor="#5B8C5A" />
+                        <Label Grid.Column="1" x:Name="DiscountLabel" Text="-₱0" FontSize="14" TextColor="#5B8C5A" HorizontalOptions="End" />
+                    </Grid>
+                    <BoxView HeightRequest="1" BackgroundColor="{StaticResource FloraFieldBg}" />
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Total" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource FloraCharcoal}" />
+                        <Label Grid.Column="1" x:Name="TotalLabel" Text="₱3,549" FontAttributes="Bold" FontSize="18" TextColor="{StaticResource FloraCharcoal}" HorizontalOptions="End" />
+                    </Grid>
+                    <Label Text="incl. VAT" FontSize="11" TextColor="{StaticResource FloraMuted}" HorizontalOptions="End" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Grid ColumnDefinitions="*,*,*">
+                <VerticalStackLayout Grid.Column="0" Spacing="4" HorizontalOptions="Center">
+                    <Label Text="&#xE73E;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="#5B8C5A" HorizontalOptions="Center" />
+                    <Label Text="Free returns" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="1" Spacing="4" HorizontalOptions="Center">
+                    <Label Text="&#xE73E;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="#5B8C5A" HorizontalOptions="Center" />
+                    <Label Text="Secure payment" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+                <VerticalStackLayout Grid.Column="2" Spacing="4" HorizontalOptions="Center">
+                    <Label Text="&#xE73E;" FontFamily="Segoe Fluent Icons" FontSize="16" TextColor="#5B8C5A" HorizontalOptions="Center" />
+                    <Label Text="Same-day delivery" FontSize="10" TextColor="{StaticResource FloraMuted}" HorizontalOptions="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Border BackgroundColor="{StaticResource FloraBlush}" StrokeShape="RoundRectangle 24" HeightRequest="54">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnContinueTapped" />
+                </Border.GestureRecognizers>
+                <HorizontalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="8">
+                    <Label Text="Continue to Delivery" FontAttributes="Bold" FontSize="16" TextColor="White" />
+                    <Label Text="&#xE76C;" FontFamily="Segoe Fluent Icons" FontSize="14" TextColor="White" />
+                </HorizontalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
